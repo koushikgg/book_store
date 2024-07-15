@@ -1,0 +1,137 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.header-main-cnt {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    background: #A03037 0% 0% no-repeat padding-box;
+    opacity: 1;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-logo-search-main-cnt {
+    width: 48.3%;
+    display: flex;
+    margin-left: 11.9%;
+    gap: 6.3%;
+}
+
+.header-logo-main-cnt {
+    width: 19.3%;
+    display: flex;
+    gap: 4.6%;
+    align-items: center;
+    font: normal normal normal 12px/16px Roboto;
+    letter-spacing: 0px;
+    color: #9D9D9D;
+    opacity: 1;
+    img {
+        width: 24.35%;
+        height: 23.7px;
+        object-fit: cover;
+    }
+
+    p {
+        text-align: left;
+        font: normal normal normal 20px/26px Roboto;
+        letter-spacing: 0px;
+        color: #FFFFFF;
+        text-transform: capitalize;
+        opacity: 1;
+    }
+}
+
+.header-search-main-cnt {
+    width: 74.24%;
+    height: 33px;
+    background-color: #FCFCFC;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+
+    #header-seacrh-logo {
+        margin-left: 2.81%;
+        width: 3.6%;
+        height: 16.9px;
+        color: #9D9D9D;
+    }
+
+    input {
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+    }
+}
+
+.header-opt-main-cnt {
+    width: 14%;
+    height: 100%;
+    display: flex;
+    margin-right: 10.7%;
+
+    .header-opt-acct-cnt {
+        width: 50%;
+        display: flex;
+        border: 1px solid #7a1c22af;
+        justify-content: center;
+        align-items: flex-end;
+        color: white;
+
+        .header-opt-acct-inner-cnt {
+            margin-bottom: 4px;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+
+            #header-opt-acct-logo {
+                width: 60%;
+            }
+
+            p {
+                font: normal normal normal 10px/13px Roboto;
+                letter-spacing: 0.45px;
+                color: #FFFFFF;
+                opacity: 1;
+            }
+        }
+    }
+
+    .header-opt-cart-cnt {
+        border: 1px solid #7a1c22af;
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+
+        .header-opt-cart-inner-cnt {
+            margin-bottom: 4px;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            gap: 5px;
+
+            #header-opt-cart-logo {
+                width: 55%;
+            }
+
+            p {
+                font: normal normal normal 10px/13px Roboto;
+                letter-spacing: 0.45px;
+                color: #FFFFFF;
+                opacity: 1;
+            }
+        }
+    }
+}
