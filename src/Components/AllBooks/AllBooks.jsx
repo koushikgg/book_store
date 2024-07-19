@@ -5,11 +5,13 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useSelector } from "react-redux";
+import { Store } from "@mui/icons-material";
 
 function AllBooks() {
     const [booklist, setBooklist] = useState([]);
     const [sortSelect, setSortSelect] = useState('');
-
+    const bookList = useSelector((store)=> store.allbooksStore.allBooks)
 
     return (
         <>
@@ -35,7 +37,10 @@ function AllBooks() {
                 </FormControl>
             </div>
             <div className="allbooks-main-cnt">
-                <Book />
+                {bookList?.map((book)=>(
+                    <Book  bookDetails={book}/>
+                ))}
+                {/* <Book /> */}
             </div>
         </>
     );

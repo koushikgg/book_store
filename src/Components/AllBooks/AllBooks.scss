@@ -36,6 +36,10 @@
 
 .allbooks-main-cnt {
     width: 74.51%;
+    // height: auto;
     padding-left: 12.59%;
     padding-right: 12.9%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
