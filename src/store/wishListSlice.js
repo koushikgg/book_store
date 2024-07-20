@@ -10,10 +10,13 @@ const wishListSlice = createSlice({
             state.wishListItems=action.payload
         },
         addItemToWishList: (state, action) => {
-          state.wishListItems.push(action.payload);
+            const itemExists = state.wishListItems.some(item => item._id === action.payload._id);
+            if (!itemExists) {
+                state.wishListItems.push(action.payload);
+            }
         },
         deleteItemFromWishList: (state, action) => {
-            state.wishListItems = state.wishListItems.filter((wishList) => wishList._id !== action.payload)
+            state.wishListItems = state.wishListItems.filter((wishList) => wishList._id !== action.payload._id)
         }
     }
 })

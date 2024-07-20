@@ -46,7 +46,7 @@ function Header() {
     async function fectchBooks(){
         const res= await getAllBooksApi();
         const list = res?.data?.result
-        console.log(list);
+        // console.log(list);
         dispatch(getAllBooks(res?.data?.result))
     }
 
@@ -69,7 +69,7 @@ function Header() {
         <>
             <div className="header-main-cnt">
                 <div className="header-logo-search-main-cnt">
-                    <div className='header-logo-main-cnt' onClick={()=>navigate(`/dashboard/allbooks`)}>
+                    <div className='header-logo-main-cnt' onClick={()=>navigate(`/dashboard`)}>
                         <img src={BookLogo} alt="" />
                         <p>Bookstore</p>
                     </div>
@@ -99,7 +99,7 @@ function Header() {
                                 <Button variant="outlined" id='header-profile-main-before-login-btn' onClick={handleClickModal}><p>LOGIN/SIGNUP</p></Button>
                                 <hr />
                                 <Button variant="text" id='header-profile-main-before-login-order-btn' ><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
-                                <Button variant="text" id='header-profile-main-before-login-wish-btn'><FavoriteBorderOutlinedIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Wishlist</p></Button>
+                                <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={()=>navigate(`/dashboard/wishlist`)}><FavoriteBorderOutlinedIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Wishlist</p></Button>
                             </div>
                         </Menu>
                     </div>

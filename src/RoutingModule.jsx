@@ -16,7 +16,7 @@ function RoutingModule() {
             element: <DashBoard />,
             children: [
                 {
-                    path: "allbooks",
+                    path: "",
                     element: <AllBooks />,
                 },
                 {
