@@ -5,7 +5,8 @@ import AllBooks from "./Components/AllBooks/AllBooks";
 import BookView from "./Components/BookView/BookView";
 import { Provider } from "react-redux";
 import bookStore from "./store/bookStore";
-
+import Cart from "./Components/Cart/Cart";
+import Wishlist from "./Components/WishList/WishList";
 
 
 function RoutingModule() {
@@ -19,8 +20,15 @@ function RoutingModule() {
                     element: <AllBooks />,
                 },
                 {
-                    path: "bookview",
+                    path: "bookview/:bookid",
                     element: <BookView />,
+                },
+                {
+                    path: "cart",
+                    element: <Cart />,
+                },{
+                    path: "wishlist",
+                    element: <Wishlist />,
                 }
             ]
         }

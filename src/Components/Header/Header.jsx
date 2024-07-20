@@ -16,6 +16,7 @@ import TextField from '@mui/material/TextField';
 import { getAllBooksApi } from '../../Services/bookService';
 import { useDispatch } from 'react-redux';
 import { getAllBooks } from '../../store/bookListSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const style = {
@@ -31,6 +32,7 @@ const style = {
 };
 
 function Header() {
+    const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [anchorE2, setAnchorE2] = React.useState(null);
@@ -67,7 +69,7 @@ function Header() {
         <>
             <div className="header-main-cnt">
                 <div className="header-logo-search-main-cnt">
-                    <div className='header-logo-main-cnt'>
+                    <div className='header-logo-main-cnt' onClick={()=>navigate(`/dashboard/allbooks`)}>
                         <img src={BookLogo} alt="" />
                         <p>Bookstore</p>
                     </div>
@@ -102,7 +104,7 @@ function Header() {
                         </Menu>
                     </div>
                     <div className='header-opt-cart-cnt'>
-                        <div className='header-opt-cart-inner-cnt'>
+                        <div className='header-opt-cart-inner-cnt' onClick={()=>navigate(`/dashboard/cart`)}>
                             <ShoppingCartOutlinedIcon id="header-opt-cart-logo" />
                             <p>Cart</p>
                         </div>

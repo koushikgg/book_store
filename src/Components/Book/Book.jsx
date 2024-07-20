@@ -1,11 +1,15 @@
 import booklogo from '../../Assets/book1.png';
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import './Book.scss'
+import { useNavigate } from 'react-router-dom';
+
+
 
 function Book({ bookDetails }) {
+    const navigate = useNavigate();
     return (
         <>
-            <div className="book-main-cnt">
+            <div className="book-main-cnt" onClick={()=>navigate(`/dashboard/bookview/${bookDetails._id}`)}>
                 <div className="book-img-main-cnt">
                     <img src={booklogo} alt="" />
                 </div>
