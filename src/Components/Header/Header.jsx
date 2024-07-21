@@ -44,10 +44,103 @@ function Header() {
     },[])
 
     async function fectchBooks(){
-        const res= await getAllBooksApi();
-        const list = res?.data?.result
+        // const res= await getAllBooksApi();
+        // const list = res?.data?.result
+        const bookList = [
+            {
+              _id: '1',
+              bookName: 'The Great Gatsby',
+              author: 'F. Scott Fitzgerald',
+              quantity: 5,
+              discountPrice: 200,
+              price: 300,
+              booklogo: 'path/to/gatsby.jpg'
+            },
+            {
+              _id: '2',
+              bookName: '1984',
+              author: 'George Orwell',
+              quantity: 8,
+              discountPrice: 150,
+              price: 250,
+              booklogo: 'path/to/1984.jpg'
+            },
+            {
+              _id: '3',
+              bookName: 'To Kill a Mockingbird',
+              author: 'Harper Lee',
+              quantity: 7,
+              discountPrice: 180,
+              price: 280,
+              booklogo: 'path/to/mockingbird.jpg'
+            },
+            {
+              _id: '4',
+              bookName: 'Pride and Prejudice',
+              author: 'Jane Austen',
+              quantity: 6,
+              discountPrice: 220,
+              price: 320,
+              booklogo: 'path/to/pride.jpg'
+            },
+            {
+              _id: '5',
+              bookName: 'The Catcher in the Rye',
+              author: 'J.D. Salinger',
+              quantity: 9,
+              discountPrice: 170,
+              price: 270,
+              booklogo: 'path/to/catcher.jpg'
+            },
+            {
+              _id: '6',
+              bookName: 'The Hobbit',
+              author: 'J.R.R. Tolkien',
+              quantity: 4,
+              discountPrice: 230,
+              price: 330,
+              booklogo: 'path/to/hobbit.jpg'
+            },
+            {
+              _id: '7',
+              bookName: 'Moby-Dick',
+              author: 'Herman Melville',
+              quantity: 3,
+              discountPrice: 210,
+              price: 310,
+              booklogo: 'path/to/mobydick.jpg'
+            },
+            {
+              _id: '8',
+              bookName: 'War and Peace',
+              author: 'Leo Tolstoy',
+              quantity: 2,
+              discountPrice: 250,
+              price: 350,
+              booklogo: 'path/to/warandpeace.jpg'
+            },
+            {
+              _id: '9',
+              bookName: 'The Odyssey',
+              author: 'Homer',
+              quantity: 10,
+              discountPrice: 160,
+              price: 260,
+              booklogo: 'path/to/odyssey.jpg'
+            },
+            {
+              _id: '10',
+              bookName: 'The Divine Comedy',
+              author: 'Dante Alighieri',
+              quantity: 1,
+              discountPrice: 240,
+              price: 340,
+              booklogo: 'path/to/divinecomedy.jpg'
+            }
+          ];
+          
         // console.log(list);
-        dispatch(getAllBooks(res?.data?.result))
+        dispatch(getAllBooks(bookList))
     }
 
     const handleClickModal = (event) => {

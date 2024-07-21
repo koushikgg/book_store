@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Book from "../Book/Book";
 import './AllBooks.scss';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,30 +12,34 @@ function AllBooks() {
     const [booklist, setBooklist] = useState([]);
     const [sortSelect, setSortSelect] = useState('');
     const bookList = useSelector((store)=> store.allbooksStore.allBooks)
+    const [bookCount, setBookCount] = useState(bookList.length)
+    useEffect(()=>{
+        setBookCount(bookCount.length)
+    },[bookList])
 
     return (
         <>
-            <div className="allbooks-name-sort-opt-main-cnt">
-                <div className="allbooks-total-count-main-cnt">
-                    <p id="allbooks-book-text">Book</p>
-                    <p id="allbooks-total-count">(120 items)</p>
+                <div className="allbooks-name-sort-opt-main-cnt">
+                    <div className="allbooks-total-count-main-cnt">
+                        <p id="allbooks-book-text">Book</p>
+                        <p id="allbooks-total-count">({bookCount} items)</p>
+                    </div>
+                    <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                        <InputLabel id="demo-select-small-label">Sort by relevance  </InputLabel>
+                        <Select
+                            labelId="demo-select-small-label"
+                            id="demo-select-small"
+                            label="Sort by relevance  "
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                        </Select>
+                    </FormControl>
                 </div>
-                <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                    <InputLabel id="demo-select-small-label">Sort by relevance  </InputLabel>
-                    <Select
-                        labelId="demo-select-small-label"
-                        id="demo-select-small"
-                        label="Sort by relevance  "
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                </FormControl>
-            </div>
             <div className="allbooks-main-cnt">
                 {bookList?.map((book)=>(
                     <Book  bookDetails={book}/>

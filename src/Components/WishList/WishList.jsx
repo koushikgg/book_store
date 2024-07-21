@@ -2,12 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from '@mui/material/Button';
 import { deleteItemFromWishList } from "../../store/wishListSlice";
 import { useEffect, useState } from "react";
-
+import bookLogo from "../../Assets/book1.png"
+import DeleteIcon from '@mui/icons-material/Delete';
+import "./WishList.scss"
 
 function Wishlist() {
     const wishListDetails = useSelector(store => store.wishListDetails.wishListItems)
     const [wishList, setWishList]= useState(wishListDetails)
-    const wishlistCount = wishList.length
+    const [wishlistCount, setWishlistCount] = useState(wishList.length)
     const dispatch = useDispatch()
     console.log(wishListDetails);
 
@@ -21,28 +23,38 @@ function Wishlist() {
 
     return (
         <>
-            <div className="cart-container">
-                <div className="cart-header">
-                    <h1 className="cart-title">My Cart ({wishlistCount})</h1>
-                    <p className="cart-location">Use current location</p>
+            <div className="wishlist-main-cnt">
+                <div className="wishlist-name-sort-opt-main-cnt">
+                    <div className="wishlist-total-count-main-cnt">
+                        <p id="wishlist-book-text">Home/</p>
+                        <p id="wishlist-total-count">My Cart</p>
+                    </div>
                 </div>
-                {wishList?.map((book, key) =>
-                    <div key={key} className="cart-items">
-                        <div className="cart-item">
-                            <div className="cart-item-title">{book.bookName}</div>
-                            <div className="cart-item-details">
-                                <p className="cart-item-price">Rs. 1500</p>
-                                <Button variant="contained" onClick={() => handleClick('deleteItemFromWishList', book)}>Remove</Button>
+                <div className="wishlist-container-inner-cnt">
+                    <div className="wishlist-header-main-cnt">
+                        <h1 className="wishlist-title">My Cart ({wishlistCount})</h1>
+                    </div>
+                    {wishListDetails?.map((book, key) =>
+                        <div key={key} className="wishlist-items-main-cnt">
+                            <div className="wishlist-items-main-info-cnt">
+                                <div className="wishlist-items-main-info-img-cnt">
+                                    <img src={bookLogo} alt="" />
+                                </div>
+                                <div className="wishlist-items-main-info-txt-cnt">
+                                    <p id="wishlist-book-name-btn">{wishListDetails.bookName}Dont make Me Think</p>
+                                    <p id="wishlist-book-author-btn">{wishListDetails.author}Koushik</p>
+                                    <div className="wishlist-item-details">
+                                        <span id="wishlist-item-discountedPrice">Rs.1500{wishListDetails.discountedPrice}</span>
+                                        <span id="wishlist-item-originalPrice">Rs.2000{wishListDetails.price}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="wishlist-items-main-quantity-cnt">
+                                <DeleteIcon id="wishlist-item-delete-logo" onClick={() => handleClick('deleteItemFromWishList', book)}/>
                             </div>
                         </div>
-                    </div>
-                )}
-                <div className="cart-actions">
-                    <Button variant="contained">PLACE ORDER</Button>
-                </div>
-                <div className="cart-sections">
-                    <div className="cart-section-header">Address Details</div>
-                    <div className="cart-section-header">Order Summary</div>
+                    )}
+                    
                 </div>
             </div>
         </>
