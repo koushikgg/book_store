@@ -61,7 +61,7 @@ function AllBooks() {
                 {/* <Book /> */}
             </div>
             <Stack spacing={2}>
-                <Pagination count={5} shape="rounded" onChange={handlePageChange} />
+                <Pagination count={5} shape="rounded" onChange={handlePageChange} style={{justifyContent:"center",margin:"30px 0px 40px 0px"}}/>
             </Stack>
         </>
     );

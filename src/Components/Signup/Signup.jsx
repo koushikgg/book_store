@@ -6,6 +6,10 @@ import TextField from '@mui/material/TextField';
 import loginImg from "../../Assets/login-img.png"
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
+import { userSignUpApi } from "../../Services/userService";
+import { toast } from 'react-toastify';
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 
 const style = {
@@ -26,20 +30,30 @@ function Signup({ open, handleClose }) {
     const [email, setEmail] = useState('')
     const [password, setPasword] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
+    const navigate = useNavigate()
 
-    async function handleClick(action){
-        if (action==="signup"){
-            let data = {
+    async function handleClick(action) {
+        if (action === "signup") {
+            const data = {
                 "fullName": fullname,
                 "email": email,
                 "password": password,
                 "phone": phoneNumber
-              }
-            await user
+            }
+            try {
+                const res = await userSignUpApi(data)
+                if (res.status === 200) {
+                    handleClose()
+                    toast.success("User Registered SuccessFully")
+                }
+            } catch (error) {
+                toast.error("Something Went Wrong")
+            }
         }
     }
 
     return (
+
         <>
             <Modal
                 open={open}
@@ -54,25 +68,25 @@ function Signup({ open, handleClose }) {
                     </div>
                     <div className='header-profile-main-login-inp-main-cnt'>
                         <div className='header-profile-main-login-inp-txt-cnt'>
-                            <p onClick={() => setShowLogin(true)} style={ showLogin ? {color: '#0A0102'} : {color: '#878787'} }>LOGIN</p>
-                            <p onClick={() => setShowLogin(false)} style={ !showLogin ? {color: '#0A0102'} : {color: '#878787'} }>SIGNUP</p>
-                        </div> 
+                            <p onClick={() => setShowLogin(true)} style={{ color: showLogin ? '#0A0102' : '#878787',cursor: 'pointer'}}>LOGIN</p>
+                            <p onClick={() => setShowLogin(false)} style={{ color: !showLogin ? '#0A0102' : '#878787',cursor: 'pointer'}}>SIGNUP</p>
+                        </div>
                         {showLogin ?
                             <>
                                 <div className='header-profile-main-login-inp-txt-main-cnt'>
                                     <p>Email id</p>
-                                    <input id="header-profile-main-login-inp-cnt" type="text" />
+                                    <input id="header-profile-main-login-inp-cnt" type="text" onChange={(e) => setEmail(e.target.value)} />
                                 </div>
                                 <div className='header-profile-main-login-inp-txt-main-cnt'>
                                     <p>Password</p>
-                                    <input id="header-profile-main-login-inp-cnt" type="text" />
+                                    <input id="header-profile-main-login-inp-cnt" type="text" onChange={(e) => setPasword(e.target.value)} />
                                     <p id="header-profile-main-login-inp-pass-forgot-txt">Forgot Password?</p>
                                 </div>
                                 <Button variant="contained" id='header-profile-main-login-signup-cnt'>Login</Button>
                                 <div className='header-profile-main-login-inp-txt-main-or-cnt'>
-                                    <hr id="header-profile-main-login-line"/>
+                                    <hr id="header-profile-main-login-line" />
                                     <p>OR</p>
-                                    <hr id="header-profile-main-login-line"/>
+                                    <hr id="header-profile-main-login-line" />
                                 </div>
                                 <div className='header-profile-main-login-inp-txt-main-log-cnt'>
                                     <Button variant="contained" id='header-profile-main-login-facebook-cnt'>Facebook</Button>
@@ -82,21 +96,21 @@ function Signup({ open, handleClose }) {
                             : <>
                                 <div className='header-profile-main-login-inp-txt-main-cnt'>
                                     <p>Full Name</p>
-                                    <input id="header-profile-main-login-inp-cnt" type="text" />
+                                    <input id="header-profile-main-login-inp-cnt" type="text" onChange={(e) => { setFullname(e.target.value) }} />
                                 </div>
                                 <div className='header-profile-main-login-inp-txt-main-cnt'>
                                     <p>Email id</p>
-                                    <input id="header-profile-main-login-inp-cnt" type="text" />
+                                    <input id="header-profile-main-login-inp-cnt" type="text" onChange={(e) => { setEmail(e.target.value) }} />
                                 </div>
                                 <div className='header-profile-main-login-inp-txt-main-cnt'>
                                     <p>Password</p>
-                                    <input id="header-profile-main-login-inp-cnt" type="text" />
+                                    <input id="header-profile-main-login-inp-cnt" type="text" onChange={(e) => { setPasword(e.target.value) }} />
                                 </div>
                                 <div className='header-profile-main-login-inp-txt-main-cnt'>
                                     <p>Mobile Number</p>
-                                    <input id="header-profile-main-login-inp-cnt" type="text" />
+                                    <input id="header-profile-main-login-inp-cnt" type="text" onChange={(e) => { setPhoneNumber(e.target.value) }} />
                                 </div>
-                                <Button variant="contained" id='header-profile-main-login-signup-cnt' onClick={()=>handleClick('signup' )}>SIGNUP</Button>
+                                <Button variant="contained" id='header-profile-main-login-signup-cnt' onClick={() => handleClick('signup')}>SIGNUP</Button>
 
                             </>}
                     </div>
