@@ -29,11 +29,13 @@
     letter-spacing: 0px;
     color: #9D9D9D;
     opacity: 1;
+    cursor: pointer;
 
     img {
         width: 24.35%;
         height: 23.7px;
         object-fit: cover;
+        cursor: pointer;
     }
 
     p {
@@ -43,6 +45,7 @@
         color: #FFFFFF;
         text-transform: capitalize;
         opacity: 1;
+        cursor: pointer;
     }
 }
 
@@ -92,9 +95,11 @@
             justify-content: space-between;
             align-items: center;
             gap: 4px;
+            cursor: pointer;
 
             #header-opt-acct-logo {
                 width: 60%;
+                cursor: pointer;
             }
 
             p {
@@ -102,6 +107,7 @@
                 letter-spacing: 0.45px;
                 color: #FFFFFF;
                 opacity: 1;
+                cursor: pointer;
             }
         }
     }
@@ -122,9 +128,12 @@
             align-items: center;
             color: white;
             gap: 5px;
+            cursor: pointer;
 
             #header-opt-cart-logo {
                 width: 55%;
+                cursor: pointer;
+
             }
 
             p {
@@ -132,6 +141,8 @@
                 letter-spacing: 0.45px;
                 color: #FFFFFF;
                 opacity: 1;
+                cursor: pointer;
+
             }
         }
     }
@@ -215,11 +226,18 @@
         background: #F5F5F5 0% 0% no-repeat padding-box;
         border-radius: 21px;
         opacity: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
 
         img {
-            width: 245px;
-            height: 245px;
+            width: 200px;
+            height: 200px;
             object-fit: cover;
+        }
+
+        p {
+            padding-left: 10px;
         }
     }
 
@@ -269,14 +287,23 @@
     #header-profile-main-login-inp-cnt {
         top: 396px;
         left: 727px;
-        width: 252px;
-        height: 35px;
+        width: 227px;
+        height: 30px;
         /* UI Properties */
         background: #FFFFFF 0% 0% no-repeat padding-box;
         border: 1px solid #E2E2E2;
         border-radius: 2px;
         opacity: 1;
 
+
+    }
+
+    Button {
+        width: 227px;
+        height: 30px;
+        background: #A03037 0% 0% no-repeat padding-box;
+        border-radius: 3px;
+        opacity: 1;
     }
 
 

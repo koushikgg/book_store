@@ -1,0 +1,65 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+#header-profile-main-login-inp-pass-forgot-txt {
+    padding-left: 157px;
+    text-align: left;
+    font: normal normal normal 10px/13px Roboto;
+    letter-spacing: 0px;
+    color: #9D9D9D;
+    opacity: 1;
+}
+
+.header-profile-main-login-inp-txt-main-or-cnt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin: 10px 0px;
+
+    #header-profile-main-login-line {
+        width: 30%;
+        height: 0.1px;
+    }
+
+    p {
+        text-align: left;
+        font: normal normal bold 14px/18px Meiryo UI;
+        letter-spacing: 0px;
+        color: #343434;
+        text-transform: uppercase;
+        opacity: 1;
+    }
+}
+
+.header-profile-main-login-inp-txt-main-log-cnt {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    #header-profile-main-login-facebook-cnt {
+        width: 45%;
+        background: #4266B2 0% 0% no-repeat padding-box;
+        border-radius: 3px;
+        text-align: left;
+        font: normal normal normal 12px/16px Roboto;
+        letter-spacing: 0px;
+        color: #FFFFFF;
+        opacity: 1;
+    }
+
+    #header-profile-main-login-google-cnt {
+        width: 45%;
+        background: #F5F5F5 0% 0% no-repeat padding-box;
+        border: 1px solid #E4E4E4;
+        border-radius: 3px;
+        opacity: 1;
+        text-align: left;
+        font: normal normal normal 12px/16px Roboto;
+        letter-spacing: 0px;
+        color: #0A0102;
+
+    }
+}

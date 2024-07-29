@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './BookView.scss'
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Button from '@mui/material/Button';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -17,6 +17,7 @@ function BookView() {
     // const { title, author, rating, image, originalPrice, discountedPrice, description } = book;
     const { bookid } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const cartDetails = useSelector(store => store.allcartDetails.cartDetails)
     const wishListDetails = useSelector(store => store.wishListDetails.wishListItems)
     console.log(wishListDetails);
@@ -70,7 +71,7 @@ function BookView() {
             <div className="bookview-main-cnt ">
                 <div className="bookview-name-sort-opt-main-cnt">
                     <div className="bookview-total-count-main-cnt">
-                        <p id="bookview-total-count">Home/</p>
+                        <p id="bookview-total-count" onClick={()=>navigate(`/dashboard`)}>Home/</p>
                         <p id="bookview-book-text">Book()</p>
                     </div>
                 </div>
@@ -105,11 +106,11 @@ function BookView() {
                     </div>
                     <div className="bookView-details-main-cnt">
                         <div className="bookView-details-title-main-cnt">
-                            <a href="#" id="bookView-details-title">title</a>
+                            <a href="#" id="bookView-details-title">{bookDetail.bookName}</a>
                             <span className="bookView-details-author">{bookDetail.author}</span>
                             <span className="bookView__ratingStars">4.5 <StarOutlinedIcon id="bookView-details-star"/></span>
                             <div className="bookView-details-title-price-cnt">
-                                <span className="bookView-details-discountedPrice">Rs.1500{bookDetail.discountedPrice}</span>
+                                <span className="bookView-details-discountedPrice">Rs.{bookDetail.discountPrice}</span>
                                 <span className="bookView-details-originalPrice">Rs.{bookDetail.price}</span>
                             </div>
                         </div>

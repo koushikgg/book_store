@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Header from "./Components/Header/Header";
 import DashBoard from "./Components/Dashboard/Dashboard";
 import AllBooks from "./Components/AllBooks/AllBooks";
@@ -12,11 +12,15 @@ import Wishlist from "./Components/WishList/WishList";
 function RoutingModule() {
     const appRoutes = createBrowserRouter([
         {
+            path: "",
+            element: <Navigate to="/dashboard/allbooks" />
+        },
+        {
             path: "/dashboard",
             element: <DashBoard />,
             children: [
                 {
-                    path: "",
+                    path: "allbooks",
                     element: <AllBooks />,
                 },
                 {
@@ -26,7 +30,7 @@ function RoutingModule() {
                 {
                     path: "cart",
                     element: <Cart />,
-                },{
+                }, {
                     path: "wishlist",
                     element: <Wishlist />,
                 }
