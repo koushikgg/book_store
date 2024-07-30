@@ -1,15 +1,11 @@
 import "./Signup.scss"
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
 import loginImg from "../../Assets/login-img.png"
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { userLoginApi, userSignUpApi } from "../../Services/userService";
 import { toast } from 'react-toastify';
-import { Navigate, useNavigate } from "react-router-dom";
-
 
 
 const style = {
@@ -30,8 +26,6 @@ function Signup({ open, handleClose }) {
     const [email, setEmail] = useState('')
     const [password, setPasword] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
-    const navigate = useNavigate()
-
     async function handleClick(action) {
         if (action === "signup") {
             const data = {

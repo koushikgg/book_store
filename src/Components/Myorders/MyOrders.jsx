@@ -1,17 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import Button from '@mui/material/Button';
-import { deleteItemFromWishList } from "../../store/wishListSlice";
+import {  useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import bookLogo from "../../Assets/book1.png"
-import DeleteIcon from '@mui/icons-material/Delete';
-import "./WishList.scss"
 import { useNavigate } from "react-router-dom";
 
 function MyOrders() {
     const wishListDetails = useSelector(store => store.wishListDetails.wishListItems)
     const [wishList, setWishList] = useState(wishListDetails)
     const [wishlistCount, setWishlistCount] = useState(wishList.length)
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     console.log(wishListDetails);
 
@@ -21,13 +16,6 @@ function MyOrders() {
         setWishlistCount(wishListDetails.length)
     }, [wishListDetails])
 
-    function handleClick(action, data) {
-        if (action === "deleteItemFromWishList") {
-            const updatedList = wishList.filter(book => book._id !== data._id)
-            setWishList(updatedList)
-            dispatch(deleteItemFromWishList(data))
-        }
-    }
 
     return (
         <>

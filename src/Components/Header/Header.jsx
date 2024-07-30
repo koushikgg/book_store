@@ -1,21 +1,13 @@
 import './Header.scss'
 import BookLogo from "../../Assets/education.svg";
-import loginImg from "../../Assets/login-img.png"
 import SearchIcon from '@mui/icons-material/Search';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import { getAllBooksApi } from '../../Services/bookService';
-import { useDispatch } from 'react-redux';
-import { getAllBooks } from '../../store/bookListSlice';
 import { useNavigate } from 'react-router-dom';
 import Signup from '../Signup/Signup';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
@@ -25,10 +17,7 @@ function Header() {
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const [anchorE2, setAnchorE2] = React.useState(null);
-    const openModal = Boolean(anchorE2);
     const [signupModalOpen, setSignupModalOpen] = React.useState(false);
-    const dispatch = useDispatch();
     const token = localStorage.getItem('token')
     console.log(token);
     // const [openModal, setOpenModal] = React.useState(false);
