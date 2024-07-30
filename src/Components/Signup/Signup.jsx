@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import loginImg from "../../Assets/login-img.png"
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import { userSignUpApi } from "../../Services/userService";
+import { userLoginApi, userSignUpApi } from "../../Services/userService";
 import { toast } from 'react-toastify';
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -50,6 +50,21 @@ function Signup({ open, handleClose }) {
                 toast.error("Something Went Wrong")
             }
         }
+        if (action === "login") {
+            const data = {
+                "email": email,
+                "password": password            }
+            try {
+                const res = await userLoginApi(data)
+                localStorage.setItem('token', res?.data?.result?.accessToken)
+                if (res.status === 200) {
+                    handleClose()
+                    toast.success("User Login Success")
+                }
+            } catch (error) {
+                toast.error("Something Went Wrong")
+            }
+        }
     }
 
     return (
@@ -82,7 +97,7 @@ function Signup({ open, handleClose }) {
                                     <input id="header-profile-main-login-inp-cnt" type="text" onChange={(e) => setPasword(e.target.value)} />
                                     <p id="header-profile-main-login-inp-pass-forgot-txt">Forgot Password?</p>
                                 </div>
-                                <Button variant="contained" id='header-profile-main-login-signup-cnt'>Login</Button>
+                                <Button variant="contained" id='header-profile-main-login-signup-cnt' onClick={() => handleClick('login')}>Login</Button>
                                 <div className='header-profile-main-login-inp-txt-main-or-cnt'>
                                     <hr id="header-profile-main-login-line" />
                                     <p>OR</p>

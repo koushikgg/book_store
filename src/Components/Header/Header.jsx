@@ -4,7 +4,7 @@ import loginImg from "../../Assets/login-img.png"
 import SearchIcon from '@mui/icons-material/Search';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import  React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import { getAllBooks } from '../../store/bookListSlice';
 import { useNavigate } from 'react-router-dom';
 import Signup from '../Signup/Signup';
-
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 
 
 function Header() {
@@ -29,19 +29,16 @@ function Header() {
     const openModal = Boolean(anchorE2);
     const [signupModalOpen, setSignupModalOpen] = React.useState(false);
     const dispatch = useDispatch();
+    const token = localStorage.getItem('token')
+    console.log(token);
     // const [openModal, setOpenModal] = React.useState(false);
-    useEffect(()=>{
-        fectchBooks()
-    },[])
+    // useEffect(()=>{
+    //     fectchBooks()
+    // },[])
 
-    async function fectchBooks(){
-        const res= await getAllBooksApi();
-        const list = res?.data?.result
-        // console.log(list);
-        dispatch(getAllBooks(list))
-    }
 
-   
+
+
     // const handleOpenModal = () => setOpenModal(true);
     // const handleCloseModal = () => setOpenModal(false);
 
@@ -52,15 +49,22 @@ function Header() {
         setAnchorEl(null);
     };
     const openSignupModal = (event) => {
-        setAnchorEl(null); 
-        setSignupModalOpen(true); 
+        setAnchorEl(null);
+        setSignupModalOpen(true);
     };
+
+    function handleAction(action){
+        if (action==='logout'){
+            setAnchorEl(null);
+            localStorage.removeItem('token')
+        }
+    }
 
     return (
         <>
             <div className="header-main-cnt">
                 <div className="header-logo-search-main-cnt">
-                    <div className='header-logo-main-cnt' onClick={()=>navigate(`/dashboard`)}>
+                    <div className='header-logo-main-cnt' onClick={() => navigate(`/dashboard`)}>
                         <img src={BookLogo} alt="" />
                         <p>Bookstore</p>
                     </div>
@@ -84,18 +88,27 @@ function Header() {
                                 'aria-labelledby': 'basic-button',
                             }}
                         >
-                            <div className='header-profile-main-before-login-cnt'>
-                                <p id='header-profile-main-before-login-txt1'>Welcome</p>
-                                <p id='header-profile-main-before-login-txt2'>To access account and manage orders</p>
-                                <Button variant="outlined" id='header-profile-main-before-login-btn' onClick={openSignupModal}><p>LOGIN/SIGNUP</p></Button>
-                                <hr />
-                                <Button variant="text" id='header-profile-main-before-login-order-btn' ><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
-                                <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={()=>navigate(`/dashboard/wishlist`)}><FavoriteBorderOutlinedIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Wishlist</p></Button>
-                            </div>
+                            {!token ?
+                                <div className='header-profile-main-before-login-cnt'>
+                                    <p id='header-profile-main-before-login-txt1'>Welcome</p>
+                                    <p id='header-profile-main-before-login-txt2'>To access account and manage orders</p>
+                                    <Button variant="outlined" id='header-profile-main-before-login-btn' onClick={openSignupModal}><p>LOGIN/SIGNUP</p></Button>
+                                    <hr />
+                                    <Button variant="text" id='header-profile-main-before-login-order-btn' ><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
+                                    <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={() => navigate(`/dashboard/wishlist`)}><FavoriteBorderOutlinedIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Wishlist</p></Button>
+                                </div> :
+                                <div className='header-profile-main-before-login-cnt'>
+                                    <p id='header-profile-main-after-login-txt1'>Hello</p>
+                                    <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={() => navigate(`/dashboard/wishlist`)}><PermIdentityIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Profile</p></Button>
+                                    <Button variant="text" id='header-profile-main-before-login-order-btn' style={{marginTop:'0px'}}><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
+                                    <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={() => navigate(`/dashboard/wishlist`)}><FavoriteBorderOutlinedIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Wishlist</p></Button>
+                                    <Button variant="outlined" id='header-profile-main-before-login-btn' onClick={()=> handleAction('logout')}><p>Logout</p></Button>
+
+                                </div>}
                         </Menu>
                     </div>
                     <div className='header-opt-cart-cnt'>
-                        <div className='header-opt-cart-inner-cnt' onClick={()=>navigate(`/dashboard/cart`)}>
+                        <div className='header-opt-cart-inner-cnt' onClick={() => navigate(`/dashboard/cart`)}>
                             <ShoppingCartOutlinedIcon id="header-opt-cart-logo" />
                             <p>Cart</p>
                         </div>
