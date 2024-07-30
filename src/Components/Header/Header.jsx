@@ -64,7 +64,7 @@ function Header() {
         <>
             <div className="header-main-cnt">
                 <div className="header-logo-search-main-cnt">
-                    <div className='header-logo-main-cnt' onClick={() => navigate(`/dashboard`)}>
+                    <div className='header-logo-main-cnt' onClick={() => navigate(`/dashboard/allbooks`)}>
                         <img src={BookLogo} alt="" />
                         <p>Bookstore</p>
                     </div>
@@ -94,13 +94,13 @@ function Header() {
                                     <p id='header-profile-main-before-login-txt2'>To access account and manage orders</p>
                                     <Button variant="outlined" id='header-profile-main-before-login-btn' onClick={openSignupModal}><p>LOGIN/SIGNUP</p></Button>
                                     <hr />
-                                    <Button variant="text" id='header-profile-main-before-login-order-btn' ><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
+                                    <Button variant="text" id='header-profile-main-before-login-order-btn' onClick={() => navigate(`/dashboard/myorder`)}><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
                                     <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={() => navigate(`/dashboard/wishlist`)}><FavoriteBorderOutlinedIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Wishlist</p></Button>
                                 </div> :
                                 <div className='header-profile-main-before-login-cnt'>
                                     <p id='header-profile-main-after-login-txt1'>Hello</p>
-                                    <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={() => navigate(`/dashboard/wishlist`)}><PermIdentityIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Profile</p></Button>
-                                    <Button variant="text" id='header-profile-main-before-login-order-btn' style={{marginTop:'0px'}}><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
+                                    <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={() => navigate(`/dashboard/profile`)}><PermIdentityIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Profile</p></Button>
+                                    <Button variant="text" id='header-profile-main-before-login-order-btn' style={{marginTop:'0px'}} onClick={() => navigate(`/dashboard/myorder`)}><ShoppingBagOutlinedIcon id='header-profile-main-before-login-order-btn-logo' /><p>My Orders</p></Button>
                                     <Button variant="text" id='header-profile-main-before-login-wish-btn' onClick={() => navigate(`/dashboard/wishlist`)}><FavoriteBorderOutlinedIcon id='header-profile-main-before-login-wish-btn-logo' /><p>Wishlist</p></Button>
                                     <Button variant="outlined" id='header-profile-main-before-login-btn' onClick={()=> handleAction('logout')}><p>Logout</p></Button>
 
