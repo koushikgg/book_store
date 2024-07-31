@@ -13,14 +13,18 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import PlaceIcon from '@mui/icons-material/Place';
 import Signup from "../Signup/Signup";
 import { useNavigate } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+
 
 
 function Cart() {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('token');
     const cartDetails = useSelector(store => store.allcartDetails.cartDetails)
     const allBookDetails = useSelector(store => store.allbooksStore.allBooks)
     const [cartCount, setCartCount] = useState(0)
     const [signupModalOpen, setSignupModalOpen] = React.useState(false);
+    const [customerDetails, setCustomerDetails] = useState(false)
+    const [orderDetails, setOrderDetails] = useState(false)
     const dispatch = useDispatch();
     const navigate = useNavigate()
     console.log(cartDetails);
@@ -49,10 +53,12 @@ function Cart() {
     const openSignupModal = (event) => {
         setSignupModalOpen(true);
     };
-    function handlePlaceOrder(){
-        if (!token){
+    function handlePlaceOrder() {
+        if (!token) {
             openSignupModal();
             return;
+        } else {
+            setCustomerDetails(true)
         }
     }
 
@@ -61,7 +67,7 @@ function Cart() {
             <div className="cart-main-cnt">
                 <div className="cart-name-sort-opt-main-cnt">
                     <div className="cart-total-count-main-cnt">
-                        <p id="cart-book-text" onClick={()=>navigate(`/dashboard`)}>Home/</p>
+                        <p id="cart-book-text" onClick={() => navigate(`/dashboard`)}>Home/</p>
                         <p id="cart-total-count">My Cart</p>
                     </div>
                 </div>
@@ -106,11 +112,88 @@ function Cart() {
                         </div>
                     )}
                     <div className="cart-actions-main-cnt">
-                        <Button variant="contained" id="cart-place-order-btn" onClick={()=>handlePlaceOrder()}>PLACE ORDER</Button>
+                        {!customerDetails && <Button variant="contained" id="cart-place-order-btn" onClick={() => handlePlaceOrder()}>PLACE ORDER</Button>
+                        }
                     </div>
                 </div>
-                <div className="cart-address-details-main-cnt">Address Details</div>
-                <div className="cart-order-details-main-cnt">Order Summary</div>
+                {customerDetails ?
+                    <div className="cart-address-details-main1-cnt">
+                        <div className="cart-address-details-customer-txt-btn-cnt">
+                            <p>Customer Details</p>
+                            <Button variant="outlined" id='cart-address-details-customer-btn' ><p>Add New Address</p></Button>
+                        </div>
+                        <div className="cart-address-details-customer-name-num-inp-cnt">
+                            <div className="cart-address-details-customer-name-inp-cnt">
+                                <p>Full Name</p>
+                                <input type="text" />
+                            </div>
+                            <div className="cart-address-details-customer-name-inp-cnt">
+                                <p>Mobile Number</p>
+                                <input type="text" />
+                            </div>
+                        </div>
+                        <div className="cart-address-details-customer-address-main-cnt">
+                            <div className="cart-address-details-customer-address-txt1-cnt">
+                                <p id="cart-address-details-customer-address-txt1 ">1.Work</p>
+                                <p id="cart-address-details-customer-address-txt2">Edit</p>
+                            </div>
+                            <div className="cart-address-details-customer-address-inner-cnt">
+                                <p>Address</p>
+                                <TextField id="outlined-multiline-flexible " multiline maxRows={4} />
+                            </div>
+                            <div className="cart-address-details-customer-name-num-inp-cnt address-city-state-cnt">
+                                <div className="cart-address-details-customer-name-inp-cnt">
+                                    <p>City/town</p>
+                                    <input type="text" id="cart-address-details-customer-state-inp" />
+                                </div>
+                                <div className="cart-address-details-customer-name-inp-cnt">
+                                    <p>State</p>
+                                    <input type="text" id="cart-address-details-customer-state-inp" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="cart-address-details-customer-address-main-display-cnt">
+                            <p>2.Home</p>
+                            <div className="cart-address-details-customer-address-main-display-inner-cnt">
+                                <p>Address</p>
+                                <p id="address-display-txt">BridgeLabz Solutions LLP, No. 42, 14th Main, 15th Cross, Sector 4, Opp to BDA complex, near Kumarakom restaurant, HSR Layout, Bangalore</p>
+                            </div>
+                        </div>
+                        <div className="cart-address-details-customer-address-last-btn-cnt">
+                            {!orderDetails && <Button variant="contained" id="cart-place-order-btn" onClick={() => setOrderDetails(true)}>Continue</Button>
+                            }
+                        </div>
+                    </div>
+                    :
+                    <div className="cart-address-details-main-cnt">Address Details</div>
+                }
+                {orderDetails ?
+                    <div className="cart-order-details-main1-cnt">
+                        <p id="cart-order-summery-main-txt">Order Summery</p>
+                        {cartDetails?.map((book, key) =>
+                            <div key={key} className="cart-items-main-cnt">
+                                <div className="cart-items-main-info-cnt">
+                                    <div className="cart-items-main-info-img-cnt">
+                                        <img src={bookLogo} alt="" />
+                                    </div>
+                                    <div className="cart-items-main-info-txt-cnt">
+                                        <p id="cart-book-name-btn">{book.bookName}</p>
+                                        <p id="cart-book-author-btn">{book.author}</p>
+                                        <div className="cart-item-details">
+                                            <span id="cart-item-discountedPrice">Rs.{book.discountPrice}</span>
+                                            <span id="cart-item-originalPrice">Rs.{book.price}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        <div className="cart-order-details-btn-cnt">
+                            <Button variant="contained" id="cart-place-order-btn" >CHECKOUT</Button>
+                        </div>
+                    </div>
+                    :
+                    <div className="cart-order-details-main-cnt">Order Summary</div>
+                }
             </div>
             <Signup open={signupModalOpen} handleClose={() => setSignupModalOpen(false)} />
         </>

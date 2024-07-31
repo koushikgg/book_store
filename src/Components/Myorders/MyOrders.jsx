@@ -27,9 +27,6 @@ function MyOrders() {
                     </div>
                 </div>
                 <div className="wishlist-container-inner-cnt">
-                    <div className="wishlist-header-main-cnt">
-                        <h1 className="wishlist-title">My Wishlist({wishlistCount})</h1>
-                    </div>
                     {wishListDetails?.map((book, key) =>
                         <div key={key} className="wishlist-items-main-cnt">
                             <div className="wishlist-items-main-info-cnt">
