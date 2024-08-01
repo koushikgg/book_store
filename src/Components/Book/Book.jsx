@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function Book({ bookDetails }) {
+function Book({ bookDetails, key }) {
     const navigate = useNavigate();
     return (
         <>
-            <div className="book-main-cnt" onClick={()=>navigate(`/dashboard/bookview/${bookDetails._id}`)}>
+            <div key={key} className="book-main-cnt" onClick={()=>navigate(`/dashboard/bookview/${bookDetails._id}`)}>
                 <div className="book-img-main-cnt">
                     <img src={booklogo} alt="" />
                 </div>

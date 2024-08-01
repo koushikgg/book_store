@@ -15,7 +15,6 @@ function DashBoard (){
     async function fectchBooks(){
         const res= await getAllBooksApi();
         const list = res?.data?.result
-        // console.log(list);
         dispatch(getAllBooks(list))
     }
     return (

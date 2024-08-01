@@ -19,7 +19,6 @@ function Header() {
     const open = Boolean(anchorEl);
     const [signupModalOpen, setSignupModalOpen] = React.useState(false);
     const token = localStorage.getItem('token')
-    console.log(token);
     // const [openModal, setOpenModal] = React.useState(false);
     // useEffect(()=>{
     //     fectchBooks()

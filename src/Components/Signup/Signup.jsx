@@ -6,6 +6,10 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { userLoginApi, userSignUpApi } from "../../Services/userService";
 import { toast } from 'react-toastify';
+import { addToCartListApi, addToWishListApi, getWishlistItemsApi, getallCartDetailsApi, updateCartListApi } from "../../Services/bookService";
+import { useDispatch, useSelector } from "react-redux";
+import { addBooktoCart, updateQuantity } from "../../store/cartSlice";
+import { addItemToWishList } from "../../store/wishListSlice";
 
 
 const style = {
@@ -26,6 +30,9 @@ function Signup({ open, handleClose }) {
     const [email, setEmail] = useState('')
     const [password, setPasword] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
+    const cartDetails = useSelector(store => store.allcartDetails.cartDetails)
+    const wishListDetails = useSelector(store => store.wishListDetails.wishListItems)
+    const dispatch = useDispatch();
     async function handleClick(action) {
         if (action === "signup") {
             const data = {
@@ -47,15 +54,85 @@ function Signup({ open, handleClose }) {
         if (action === "login") {
             const data = {
                 "email": email,
-                "password": password            }
+                "password": password
+            }
             try {
                 const res = await userLoginApi(data)
                 localStorage.setItem('token', res?.data?.result?.accessToken)
+                const fetchedCartList = await getallCartDetailsApi()
+                const fetchedWishList = await getWishlistItemsApi()
+                console.log("cartList", fetchedCartList);
+                console.log("wishList", fetchedWishList);
+
+                if (cartDetails.length !== 0 && fetchedCartList.length === 0) {
+                    for (const item in cartDetails) {
+                        await addToCartListApi(item._id)
+                        // await updateCartListApi()
+                    }
+                }
+                if (cartDetails.length === 0 && fetchedCartList.length !== 0) {
+                    for (const item of fetchedCartList) {
+                        dispatch(addBooktoCart({...item.product_id, cartId : item._id ,quantityToBuy: item.quantityToBuy }))
+                    }
+                }
+                if (cartDetails.length  !== 0 && fetchedCartList.length !== 0) {
+                    const cartList = new Map (cartDetails.map((item)=>[item._id, item]))
+                    const fetchcartList =new Map( fetchedCartList.map((item)=>[item.product_id._id, item]))
+
+                    for ( const item of fetchedCartList){
+                        if (!cartList.has(item.product_id._id)){
+                            dispatch(addBooktoCart({...item.product_id, cartId : item._id , quantityToBuy: item.quantityToBuy}))
+                        }
+                    }
+                    for ( const item of cartDetails){
+                        if (!fetchcartList.has(item._id)){
+                            await addToCartListApi(item._id)
+                        }
+                    }
+                    for (const [itemId, fetchData] of fetchcartList){
+                        if (cartList.has(itemId)){
+                            let cartItem = cartDetails.find(item=> item._id === itemId)
+                            if (cartItem.quantityToBuy!== fetchData.quantityToBuy){
+                                dispatch(updateQuantity({...cartItem, quantityToBuy:fetchData.quantityToBuy}))
+                            }
+                        }
+                    }
+                }
+
+                if (wishListDetails.length !== 0 && fetchedWishList.length === 0) {
+                    for (const item of wishListDetails) {
+                        await addToWishListApi(item._id)
+                        // await updateCartListApi()
+                    }
+                }
+                if (wishListDetails.length === 0 && fetchedWishList.length !== 0) {
+                    for (const item of fetchedWishList) {
+                        dispatch(addItemToWishList(item.product_id))
+                    }
+                }
+                if (wishListDetails.length  !== 0 && fetchedWishList.length !== 0) {
+                    const wishList = new Map (wishListDetails.map((item)=>[item._id, item]))
+                    const fetchWishList =new Map( fetchedWishList.map((item)=>[item.product_id._id, item.product_id]))
+
+                    for ( const item of fetchedWishList){
+                        if (!wishList.has(item.product_id._id)){
+                            dispatch(addItemToWishList(item.product_id))
+                        }
+                    }
+                    for ( const item of wishListDetails){
+                        if (!fetchWishList.has(item._id)){
+                            await addToWishListApi(item._id)
+                        }
+                    }
+                
+                }
+
                 if (res.status === 200) {
                     handleClose()
                     toast.success("User Login Success")
                 }
             } catch (error) {
+                console.log(error);
                 toast.error("Something Went Wrong")
             }
         }
@@ -77,8 +154,8 @@ function Signup({ open, handleClose }) {
                     </div>
                     <div className='header-profile-main-login-inp-main-cnt'>
                         <div className='header-profile-main-login-inp-txt-cnt'>
-                            <p onClick={() => setShowLogin(true)} style={{ color: showLogin ? '#0A0102' : '#878787',cursor: 'pointer'}}>LOGIN</p>
-                            <p onClick={() => setShowLogin(false)} style={{ color: !showLogin ? '#0A0102' : '#878787',cursor: 'pointer'}}>SIGNUP</p>
+                            <p onClick={() => setShowLogin(true)} style={{ color: showLogin ? '#0A0102' : '#878787', cursor: 'pointer' }}>LOGIN</p>
+                            <p onClick={() => setShowLogin(false)} style={{ color: !showLogin ? '#0A0102' : '#878787', cursor: 'pointer' }}>SIGNUP</p>
                         </div>
                         {showLogin ?
                             <>

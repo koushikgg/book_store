@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { decreaseQuantity, increaseQuantity, removeQuantity } from "../../store/cartSlice";
+import { addBooktoCart, decreaseQuantity, increaseQuantity, removeQuantity, updateQuantity } from "../../store/cartSlice";
 import Button from '@mui/material/Button';
 import "./Cart.scss"
 import bookLogo from "../../Assets/book1.png"
@@ -14,12 +14,14 @@ import PlaceIcon from '@mui/icons-material/Place';
 import Signup from "../Signup/Signup";
 import { useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
+import { getallCartDetailsApi, removeCartListApi } from "../../Services/bookService";
 
 
 
 function Cart() {
     const token = localStorage.getItem('token');
-    const cartDetails = useSelector(store => store.allcartDetails.cartDetails)
+    const cartDetailsList = useSelector(store => store.allcartDetails.cartDetails)
+    const [cartDetails, setCartDetails] = useState([])
     const allBookDetails = useSelector(store => store.allbooksStore.allBooks)
     const [cartCount, setCartCount] = useState(0)
     const [signupModalOpen, setSignupModalOpen] = React.useState(false);
@@ -27,26 +29,39 @@ function Cart() {
     const [orderDetails, setOrderDetails] = useState(false)
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    console.log(cartDetails);
 
     useEffect(() => {
         setCartCount(cartDetails.length)
-    }, [cartDetails])
-    function handleClick(action, book) {
-        // if (action === 'addbook') {
-        //     setBookQuantity(1);
-        //     const bookToAdd = bookInCart || { ...bookDetail, quantity: 1 };
-        //     dispatch(addBooktoCart(bookToAdd));
-        // }
+        setCartDetails(cartDetailsList)
+    }, [cartDetailsList])
+
+    async function assignCartId() {
+        const fetchedCartList = await getallCartDetailsApi()
+        for (const item of fetchedCartList) {
+            const cartList = new Map(cartDetails.map((item) => [item._id, item]))
+            if (!cartList.has(item.product_id._id)) {
+                dispatch(updateQuantity({ ...item.product_id, cartId: item._id, quantityToBuy: item.quantityToBuy }))
+            }
+        }
+    }
+    if (token) {
+        assignCartId();
+    }
+
+    async function handleClick(action, book) {
         if (action === 'decreaseQuantity') {
-            const bookToAdd = { ...book, quantity: -1 };
+            const bookToAdd = { ...book, quantityToBuy: -1 };
             dispatch(decreaseQuantity(bookToAdd))
         }
         if (action === 'increaseQuantity') {
-            const bookToAdd = { ...book, quantity: +1 };
+            const bookToAdd = { ...book, quantityToBuy: +1 };
             dispatch(increaseQuantity(bookToAdd))
         }
         if (action === 'removeQuantity') {
+            console.log(book.cartId);
+            if (token) {
+                await removeCartListApi(book.cartId)
+            }
             dispatch(removeQuantity(book))
         }
     }
@@ -61,6 +76,7 @@ function Cart() {
             setCustomerDetails(true)
         }
     }
+
 
     return (
         <>
@@ -104,7 +120,7 @@ function Cart() {
                             <div className="cart-items-main-quantity-cnt">
                                 <div className="cart-quantityControl-ctn">
                                     <button id="cart-decrease-btn" onClick={() => handleClick('decreaseQuantity', book)}><RemoveIcon /></button>
-                                    <span id="cart-quantity-btn">{book.quantity}</span>
+                                    <span id="cart-quantity-btn">{book.quantityToBuy}</span>
                                     <button id="cart-increase-btn" onClick={() => handleClick('increaseQuantity', book)}><AddIcon /></button>
                                 </div>
                                 <Button variant="contained" onClick={() => handleClick('removeQuantity', book)} id="cart-remove-btn">Remove</Button>

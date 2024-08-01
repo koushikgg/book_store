@@ -12,9 +12,7 @@ function Wishlist() {
     const [wishList, setWishList]= useState(wishListDetails)
     const [wishlistCount, setWishlistCount] = useState(wishList.length)
     const dispatch = useDispatch()
-    const navigate = useNavigate()
-    console.log(wishListDetails);
-    
+    const navigate = useNavigate()    
 
     useEffect(() => {
         setWishList(wishListDetails)

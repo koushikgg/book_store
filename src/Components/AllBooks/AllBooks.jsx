@@ -55,8 +55,8 @@ function AllBooks() {
                 </FormControl>
             </div>
             <div className="allbooks-main-cnt">
-                {paginatedBooks?.map((book) => (
-                    <Book bookDetails={book} />
+                {paginatedBooks?.map((book, key) => (
+                    <Book bookDetails={book} key={key}/>
                 ))}
                 {/* <Book /> */}
             </div>

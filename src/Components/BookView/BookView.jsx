@@ -11,6 +11,7 @@ import { addItemToWishList } from "../../store/wishListSlice";
 import bookLogo from "../../Assets/book1.png"
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import { addToCartListApi, addToWishListApi } from "../../Services/bookService";
 
 
 function BookView() {
@@ -20,16 +21,15 @@ function BookView() {
     const navigate = useNavigate();
     const cartDetails = useSelector(store => store.allcartDetails.cartDetails)
     const wishListDetails = useSelector(store => store.wishListDetails.wishListItems)
-    console.log(wishListDetails);
     const allBookDetails = useSelector(store => store.allbooksStore.allBooks)
     const bookInCart = cartDetails.find(book => book._id === bookid);
     const bookExists = wishListDetails.some(book => book._id === bookid);
     const bookDetail = allBookDetails.find(book => book._id === bookid);
+    const token = localStorage.getItem('token')
 
-    const quantity = bookInCart ? bookInCart.quantity : 0;
+    const quantity = bookInCart ? bookInCart.quantityToBuy : 0;
     const [bookQuantity, setBookQuantity] = useState(quantity)
     const [addWish, setAddWish] = useState(false)
-    console.log(addWish);
     useEffect(() => {
         setBookQuantity(quantity);
     }, [quantity]);
@@ -43,25 +43,31 @@ function BookView() {
     }, [wishListDetails]);
 
 
-    function handleClick(action, data) {
+    async function handleClick(action, data) {
         if (action === 'addbook') {
             setBookQuantity(1);
-            const bookToAdd = bookInCart || { ...bookDetail, quantity: 1 };
+            if (token){
+                await addToCartListApi(bookid, token)
+            }
+            const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: 1 };
             dispatch(addBooktoCart(bookToAdd));
         }
         if (action === 'decreaseQuantity') {
             setBookQuantity(bookQuantity - 1)
-            const bookToAdd = bookInCart || { ...bookDetail, quantity: -1 };
+            const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: -1 };
             dispatch(decreaseQuantity(bookToAdd))
         }
         if (action === 'increaseQuantity') {
             setBookQuantity(bookQuantity + 1)
-            const bookToAdd = bookInCart || { ...bookDetail, quantity: +1 };
+            const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: +1 };
             dispatch(increaseQuantity(bookToAdd))
         }
         if (action === 'addToWishList') {
+            if (token){
+                await addToWishListApi(bookid)
+            }
             setAddWish(true)
-            const bookToAdd = bookInCart || { ...bookDetail, quantity: +1 };
+            const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: +1 };
             dispatch(addItemToWishList(bookToAdd))
         }
     }

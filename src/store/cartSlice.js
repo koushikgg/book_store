@@ -8,14 +8,14 @@ const cartSlice = createSlice({
     },
     reducers: {
         addBooktoCart: (state, action) => {
-            state.cartDetails.push(action.payload)
+            state.cartDetails.push({...action.payload, quantityToBuy: 1})
         },
         increaseQuantity: (state, action) => {
             state.cartDetails = state.cartDetails.map(book => {
                 if (book._id === action.payload._id) {
                     return {
                         ...book,
-                        quantity: book.quantity + 1
+                        quantityToBuy: book.quantity + 1
                     };
                 }
                 return book;
@@ -26,13 +26,24 @@ const cartSlice = createSlice({
                 if (book._id === action.payload._id) {
                     return {
                         ...book,
-                        quantity: book.quantity - 1
+                        quantityToBuy: book.quantity - 1
+                    }
+                }
+                return book
+            })
+        },
+        updateQuantity: (state, action)=>{
+            state.cartDetails = state.cartDetails.map(book => {
+                if (book._id === action.payload._id) {
+                    return {
+                        ...action.payload
                     }
                 }
                 return book
             })
         },
         removeQuantity: (state, action) => {
+            console.log("remove");
             state.cartDetails = state.cartDetails.filter(book => {
                 if (book._id !== action.payload._id) {
                     return book;
@@ -42,5 +53,5 @@ const cartSlice = createSlice({
     }
 });
 
-export const { addBooktoCart, increaseQuantity, decreaseQuantity, removeQuantity } = cartSlice.actions;
+export const { addBooktoCart, increaseQuantity, decreaseQuantity, removeQuantity, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
