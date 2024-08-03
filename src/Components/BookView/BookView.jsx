@@ -7,11 +7,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { addBooktoCart, decreaseQuantity, increaseQuantity, updateQuantity } from "../../store/cartSlice";
-import { addItemToWishList } from "../../store/wishListSlice";
+import { addItemToWishList, deleteItemFromWishList } from "../../store/wishListSlice";
 import bookLogo from "../../Assets/book1.png"
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
-import { addToCartListApi, addToWishListApi, getallCartDetailsApi, updateCartListApi } from "../../Services/bookService";
+import { addToCartListApi, addToWishListApi, getallCartDetailsApi, removeWishListApi, updateCartListApi } from "../../Services/bookService";
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 
@@ -89,13 +89,25 @@ function BookView() {
             dispatch(increaseQuantity(bookToAdd))
         }
         if (action === 'addToWishList') {
+            const newAddWish = !addWish;
+            setAddWish(newAddWish);
+        
             if (token) {
-                await addToWishListApi(bookid)
+                if (newAddWish) {
+                    await addToWishListApi(bookDetail._d);
+                } else {
+                    await removeWishListApi(bookDetail._id);
+                }
             }
-            setAddWish(true)
-            const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: +1 };
-            dispatch(addItemToWishList(bookToAdd))
+        
+            const bookToAdd = { ...bookDetail, quantityToBuy: 1 }; 
+            if (newAddWish) {
+                dispatch(addItemToWishList(bookToAdd));
+            } else {
+                dispatch(deleteItemFromWishList(bookToAdd));
+            }
         }
+        
     }
 
     return (
@@ -156,20 +168,12 @@ function BookView() {
                             <p id="bookView-customer-title-cnt">Customer Feedback</p>
                             <div className="bookView-customerfeedback-main-cnt">
                                 <span>Overall rating</span>
-                                <div className="bookView-customerrating-star-main-cnt">
-                                    <StarBorderOutlinedIcon id='bookView-customerrating-star-cnt' />
-                                    <StarBorderOutlinedIcon id='bookView-customerrating-star-cnt' />
-                                    <StarBorderOutlinedIcon id='bookView-customerrating-star-cnt' />
-                                    <StarBorderOutlinedIcon id='bookView-customerrating-star-cnt' />
-                                    <StarBorderOutlinedIcon id='bookView-customerrating-star-cnt' />
-                                </div >
-                                <Stack spacing={1}>
-                                    <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+                                <Stack spacing={1} id="bookView-customerrating-star-main-cnt">
+                                    <Rating name="half-rating" defaultValue={0.5} precision={0.5} />
                                 </Stack>
                                 <input type="text" placeholder="Write your review" />
                                 <div className="bookView-rating-submit-btn-cnt">
                                     <Button variant="contained" id="bookView-rating-submit-btn">Submit</Button>
-
                                 </div>
                             </div>
                         </div>

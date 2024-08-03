@@ -1,7 +1,7 @@
 import axios from "axios";
 const headerConfig = {
     headers: {
-        'x-access-token': localStorage.getItem('accessToken')
+        'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmE4NjlkMDQ0MGNlYTAwMGU3NmQ1MzgiLCJpYXQiOjE3MjI2NjUxNTIsImV4cCI6MTcyMjc1MTU1Mn0._YoIneDW8l9RckLaBvgLw5mf6gLJYDAQ1WcZ-vci32k"
     }
 };
 
@@ -41,4 +41,6 @@ export const addToWishListApi = async (id) => {
     return await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add_wish_list/${id}`, '', headerConfig);
 }
 
-
+export const removeWishListApi = async (id) => {
+    return await axios.delete(`https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_wishlist_item/${id}`, headerConfig);
+}

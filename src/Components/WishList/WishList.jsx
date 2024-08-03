@@ -6,23 +6,28 @@ import bookLogo from "../../Assets/book1.png"
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./WishList.scss"
 import { useNavigate } from "react-router-dom";
+import { removeWishListApi } from "../../Services/bookService";
 
 function Wishlist() {
     const wishListDetails = useSelector(store => store.wishListDetails.wishListItems)
     const [wishList, setWishList]= useState(wishListDetails)
     const [wishlistCount, setWishlistCount] = useState(wishList.length)
     const dispatch = useDispatch()
-    const navigate = useNavigate()    
+    const navigate = useNavigate()
+    const token = localStorage.getItem('accessToken')    
 
     useEffect(() => {
         setWishList(wishListDetails)
         setWishlistCount(wishListDetails.length)
     }, [wishListDetails])
 
-    function handleClick(action, data) {
+    async function handleClick(action, data) {
         if (action === "deleteItemFromWishList") {
             const updatedList =wishList.filter(book=>book._id!==data._id)
             setWishList(updatedList)
+            if (token){
+                await removeWishListApi(data._id)
+            }
             dispatch(deleteItemFromWishList(data))
         }   
     }

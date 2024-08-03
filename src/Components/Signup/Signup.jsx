@@ -119,7 +119,6 @@ function Signup({ open, handleClose }) {
                 if (wishListDetails.length !== 0 && fetchedWishList.length === 0) {
                     for (const item of wishListDetails) {
                         await addToWishListApi(item._id)
-                        await updateCartListApi(item._id, item.quantityToBuy)
                     }
                 }
                 if (wishListDetails.length === 0 && fetchedWishList.length !== 0) {
