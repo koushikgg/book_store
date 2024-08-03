@@ -14,68 +14,60 @@ import PlaceIcon from '@mui/icons-material/Place';
 import Signup from "../Signup/Signup";
 import { useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
-import { getallCartDetailsApi, removeCartListApi } from "../../Services/bookService";
+import { getallCartDetailsApi, removeCartListApi, updateCartListApi } from "../../Services/bookService";
 
 
 
 function Cart() {
-    const token = localStorage.getItem('token');
-    const cartDetailsList = useSelector(store => store.allcartDetails.cartDetails)
-    const [cartDetails, setCartDetails] = useState([])
-    const allBookDetails = useSelector(store => store.allbooksStore.allBooks)
-    const [cartCount, setCartCount] = useState(0)
-    const [signupModalOpen, setSignupModalOpen] = React.useState(false);
-    const [customerDetails, setCustomerDetails] = useState(false)
-    const [orderDetails, setOrderDetails] = useState(false)
+    const token = localStorage.getItem('accessToken');
+    const cartDetailsList = useSelector(store => store.allcartDetails.cartDetails);
+    const allBookDetails = useSelector(store => store.allbooksStore.allBooks);
+    const [cartDetails, setCartDetails] = useState(cartDetailsList);
+    const [cartCount, setCartCount] = useState(cartDetailsList.length);
+    const [signupModalOpen, setSignupModalOpen] = useState(false);
+    const [customerDetails, setCustomerDetails] = useState(false);
+    const [orderDetails, setOrderDetails] = useState(false);
     const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
-        setCartCount(cartDetails.length)
-        setCartDetails(cartDetailsList)
-    }, [cartDetailsList])
+        setCartCount(cartDetailsList.length);
+        setCartDetails(cartDetailsList);
+    }, [cartDetailsList]);
 
-    async function assignCartId() {
-        const fetchedCartList = await getallCartDetailsApi()
-        for (const item of fetchedCartList) {
-            const cartList = new Map(cartDetails.map((item) => [item._id, item]))
-            if (!cartList.has(item.product_id._id)) {
-                dispatch(updateQuantity({ ...item.product_id, cartId: item._id, quantityToBuy: item.quantityToBuy }))
-            }
-        }
-    }
-    if (token) {
-        assignCartId();
-    }
+    // useEffect(() => {
+    //     if (token) {
+    //         assignCartId();
+    //     }
+    // }, [token]);
+    console.log(cartDetails);
 
     async function handleClick(action, book) {
-        if (action === 'decreaseQuantity') {
-            const bookToAdd = { ...book, quantityToBuy: -1 };
-            dispatch(decreaseQuantity(bookToAdd))
-        }
-        if (action === 'increaseQuantity') {
-            const bookToAdd = { ...book, quantityToBuy: +1 };
-            dispatch(increaseQuantity(bookToAdd))
-        }
-        if (action === 'removeQuantity') {
-            console.log(book.cartId);
+        const updatedQuantity = action === 'decreaseQuantity' ? book.quantityToBuy - 1 : book.quantityToBuy + 1;
+
+        if (action !== 'removeQuantity') {
+            const bookToUpdate = { ...book, quantityToBuy: updatedQuantity };
             if (token) {
-                await removeCartListApi(book.cartId)
+                await updateCartListApi(book.cartId, updatedQuantity);
             }
-            dispatch(removeQuantity(book))
+            action === 'decreaseQuantity' ? dispatch(decreaseQuantity(bookToUpdate)) : dispatch(increaseQuantity(bookToUpdate));
+        } else {
+            if (token) {
+                await removeCartListApi(book.cartId);
+            }
+            dispatch(removeQuantity(book));
         }
     }
-    const openSignupModal = (event) => {
-        setSignupModalOpen(true);
-    };
-    function handlePlaceOrder() {
+
+    const openSignupModal = () => setSignupModalOpen(true);
+
+    const handlePlaceOrder = () => {
         if (!token) {
             openSignupModal();
-            return;
         } else {
-            setCustomerDetails(true)
+            setCustomerDetails(true);
         }
-    }
+    };
 
 
     return (
@@ -83,7 +75,7 @@ function Cart() {
             <div className="cart-main-cnt">
                 <div className="cart-name-sort-opt-main-cnt">
                     <div className="cart-total-count-main-cnt">
-                        <p id="cart-book-text" onClick={() => navigate(`/dashboard`)}>Home/</p>
+                        <p id="cart-book-text" onClick={() => navigate(`/dashboard/allbooks`)}>Home/</p>
                         <p id="cart-total-count">My Cart</p>
                     </div>
                 </div>
@@ -217,4 +209,7 @@ function Cart() {
 }
 
 export default Cart;
+
+
+
 

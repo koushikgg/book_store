@@ -15,7 +15,7 @@ const cartSlice = createSlice({
                 if (book._id === action.payload._id) {
                     return {
                         ...book,
-                        quantityToBuy: book.quantity + 1
+                        quantityToBuy: book.quantityToBuy + 1
                     };
                 }
                 return book;
@@ -26,7 +26,7 @@ const cartSlice = createSlice({
                 if (book._id === action.payload._id) {
                     return {
                         ...book,
-                        quantityToBuy: book.quantity - 1
+                        quantityToBuy: book.quantityToBuy - 1
                     }
                 }
                 return book

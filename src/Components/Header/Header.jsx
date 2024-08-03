@@ -18,7 +18,7 @@ function Header() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [signupModalOpen, setSignupModalOpen] = React.useState(false);
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('accessToken')
     // const [openModal, setOpenModal] = React.useState(false);
     // useEffect(()=>{
     //     fectchBooks()
@@ -44,7 +44,7 @@ function Header() {
     function handleAction(action){
         if (action==='logout'){
             setAnchorEl(null);
-            localStorage.removeItem('token')
+            localStorage.removeItem('accessToken')
         }
     }
 

@@ -1,8 +1,7 @@
 import axios from "axios";
-
 const headerConfig = {
     headers: {
-        'x-access-token': localStorage.getItem('token')
+        'x-access-token': localStorage.getItem('accessToken')
     }
 };
 
@@ -12,16 +11,22 @@ export const getAllBooksApi = async () => {
 }
 
 export const getallCartDetailsApi = async () => {
+    console.log( localStorage.getItem('accessToken'));
+    console.log(headerConfig);
     const res = await axios.get("https://bookstore.incubation.bridgelabz.com/bookstore_user/get_cart_items", headerConfig)
     return res?.data?.result
 }
 
 export const addToCartListApi = async (id) => {
-    return await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add_cart_item/${id}`, "", headerConfig);
+    console.log(id,headerConfig);
+    return await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add_cart_item/${id}`, {}, headerConfig);
 }
 
 export const updateCartListApi = async (id, quantity) => {
-    return await axios.put(`https://bookstore.incubation.bridgelabz.com/bookstore_user/cart_item_quantity/${id}`, { quantityToBuy: quantity }, headerConfig);
+    console.log(id, quantity);
+    const res = await axios.put(`https://bookstore.incubation.bridgelabz.com/bookstore_user/cart_item_quantity/${id}`, { quantityToBuy  : quantity }, headerConfig);
+    console.log(res);
+    return res
 }
 export const removeCartListApi = async (id) => {
     return await axios.delete(`https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_cart_item/${id}`, headerConfig);

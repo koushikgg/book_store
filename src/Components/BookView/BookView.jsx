@@ -6,16 +6,17 @@ import Button from '@mui/material/Button';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { addBooktoCart, decreaseQuantity, increaseQuantity } from "../../store/cartSlice";
+import { addBooktoCart, decreaseQuantity, increaseQuantity, updateQuantity } from "../../store/cartSlice";
 import { addItemToWishList } from "../../store/wishListSlice";
 import bookLogo from "../../Assets/book1.png"
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
-import { addToCartListApi, addToWishListApi } from "../../Services/bookService";
+import { addToCartListApi, addToWishListApi, getallCartDetailsApi, updateCartListApi } from "../../Services/bookService";
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
 
 
 function BookView() {
-    // const { title, author, rating, image, originalPrice, discountedPrice, description } = book;
     const { bookid } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,15 +26,15 @@ function BookView() {
     const bookInCart = cartDetails.find(book => book._id === bookid);
     const bookExists = wishListDetails.some(book => book._id === bookid);
     const bookDetail = allBookDetails.find(book => book._id === bookid);
-    const token = localStorage.getItem('token')
-
+    const token = localStorage.getItem('accessToken')
+    console.log(token);
     const quantity = bookInCart ? bookInCart.quantityToBuy : 0;
     const [bookQuantity, setBookQuantity] = useState(quantity)
     const [addWish, setAddWish] = useState(false)
     useEffect(() => {
         setBookQuantity(quantity);
     }, [quantity]);
-    
+
     useEffect(() => {
         if (bookExists) {
             setAddWish(true)
@@ -43,27 +44,52 @@ function BookView() {
     }, [wishListDetails]);
 
 
+
     async function handleClick(action, data) {
         if (action === 'addbook') {
             setBookQuantity(1);
-            if (token){
-                await addToCartListApi(bookid, token)
-            }
             const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: 1 };
+            if (token) {
+                const fetchedCartList = await getallCartDetailsApi();
+                const updatedData = fetchedCartList.find(book => book.product_id._id === bookToAdd._id)
+                if (updatedData) {
+                    dispatch(updateQuantity({ ...bookToAdd, cartId: updatedData._id, quantityToBuy: 1 }));
+                }
+            }
             dispatch(addBooktoCart(bookToAdd));
         }
         if (action === 'decreaseQuantity') {
             setBookQuantity(bookQuantity - 1)
             const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: -1 };
+            if (token) {
+                const fetchedCartList = await getallCartDetailsApi();
+                const updatedData = fetchedCartList.find(book => book.product_id._id === bookToAdd._id)
+                if (updatedData) {
+                    console.log({ ...bookToAdd, cartId: updatedData._id });
+                    dispatch(updateQuantity({ ...bookToAdd, cartId: updatedData._id }));
+                    await updateCartListApi(updatedData._id, bookToAdd.quantityToBuy)
+
+                }
+            }
             dispatch(decreaseQuantity(bookToAdd))
         }
         if (action === 'increaseQuantity') {
             setBookQuantity(bookQuantity + 1)
             const bookToAdd = bookInCart || { ...bookDetail, quantityToBuy: +1 };
+            if (token) {
+                const fetchedCartList = await getallCartDetailsApi();
+                const updatedData = fetchedCartList.find(book => book.product_id._id === bookToAdd._id)
+                if (updatedData) {
+                    console.log({ ...bookToAdd, cartId: updatedData._id });
+                    dispatch(updateQuantity({ ...bookToAdd, cartId: updatedData._id }));
+                    await updateCartListApi(updatedData._id, bookToAdd.quantityToBuy)
+
+                }
+            }
             dispatch(increaseQuantity(bookToAdd))
         }
         if (action === 'addToWishList') {
-            if (token){
+            if (token) {
                 await addToWishListApi(bookid)
             }
             setAddWish(true)
@@ -77,7 +103,7 @@ function BookView() {
             <div className="bookview-main-cnt ">
                 <div className="bookview-name-sort-opt-main-cnt">
                     <div className="bookview-total-count-main-cnt">
-                        <p id="bookview-total-count" onClick={()=>navigate(`/dashboard`)}>Home/</p>
+                        <p id="bookview-total-count" onClick={() => navigate(`/dashboard/allbooks`)}>Home/</p>
                         <p id="bookview-book-text">Book()</p>
                     </div>
                 </div>
@@ -100,7 +126,7 @@ function BookView() {
                                     <Button variant="contained" onClick={() => handleClick('addbook', bookDetail)} id="bookView-addtobag-btn">ADD TO BAG</Button>
 
                                 ) : (
-                                    <div className="bookView-quantityControl-ctn">
+                                    <div className="bookView-quantityControl-ctn" >
                                         <button id="bookView-decrease-btn" onClick={() => handleClick('decreaseQuantity', bookDetail)}><RemoveIcon /></button>
                                         <span id="bookView-quantity-btn">{bookQuantity}</span>
                                         <button id="bookView-increase-btn" onClick={() => handleClick('increaseQuantity', bookDetail)}><AddIcon /></button>
@@ -114,7 +140,7 @@ function BookView() {
                         <div className="bookView-details-title-main-cnt">
                             <a href="#" id="bookView-details-title">{bookDetail.bookName}</a>
                             <span className="bookView-details-author">{bookDetail.author}</span>
-                            <span className="bookView__ratingStars">4.5 <StarOutlinedIcon id="bookView-details-star"/></span>
+                            <span className="bookView__ratingStars">4.5 <StarOutlinedIcon id="bookView-details-star" /></span>
                             <div className="bookView-details-title-price-cnt">
                                 <span className="bookView-details-discountedPrice">Rs.{bookDetail.discountPrice}</span>
                                 <span className="bookView-details-originalPrice">Rs.{bookDetail.price}</span>
@@ -137,6 +163,9 @@ function BookView() {
                                     <StarBorderOutlinedIcon id='bookView-customerrating-star-cnt' />
                                     <StarBorderOutlinedIcon id='bookView-customerrating-star-cnt' />
                                 </div >
+                                <Stack spacing={1}>
+                                    <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+                                </Stack>
                                 <input type="text" placeholder="Write your review" />
                                 <div className="bookView-rating-submit-btn-cnt">
                                     <Button variant="contained" id="bookView-rating-submit-btn">Submit</Button>

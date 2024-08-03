@@ -58,42 +58,59 @@ function Signup({ open, handleClose }) {
             }
             try {
                 const res = await userLoginApi(data)
-                localStorage.setItem('token', res?.data?.result?.accessToken)
+                localStorage.setItem('accessToken', res?.data?.result?.accessToken)
                 const fetchedCartList = await getallCartDetailsApi()
                 const fetchedWishList = await getWishlistItemsApi()
-                console.log("cartList", fetchedCartList);
-                console.log("wishList", fetchedWishList);
+                console.log("cart",fetchedCartList);
 
                 if (cartDetails.length !== 0 && fetchedCartList.length === 0) {
-                    for (const item in cartDetails) {
-                        await addToCartListApi(item._id)
-                        // await updateCartListApi()
+                    for (const item of cartDetails) {
+                        await addToCartListApi(item._id);
+
+                        const updatedFetchedCartList = await getallCartDetailsApi();
+                        const matchingBook = updatedFetchedCartList.find(book => item._id === book.product_id._id);
+
+                        if (matchingBook) {
+                            dispatch(updateQuantity({ ...item, cartId: matchingBook._id }));
+                            await updateCartListApi(matchingBook._id, item.quantityToBuy);
+                        }
                     }
                 }
                 if (cartDetails.length === 0 && fetchedCartList.length !== 0) {
                     for (const item of fetchedCartList) {
-                        dispatch(addBooktoCart({...item.product_id, cartId : item._id ,quantityToBuy: item.quantityToBuy }))
+                        dispatch(addBooktoCart({ ...item.product_id, cartId: item._id, }))
+                        dispatch(updateQuantity({ ...item.product_id, cartId: item._id, quantityToBuy: item.quantityToBuy }))
                     }
                 }
-                if (cartDetails.length  !== 0 && fetchedCartList.length !== 0) {
-                    const cartList = new Map (cartDetails.map((item)=>[item._id, item]))
-                    const fetchcartList =new Map( fetchedCartList.map((item)=>[item.product_id._id, item]))
+                if (cartDetails.length !== 0 && fetchedCartList.length !== 0) {
+                    const cartList = new Map(cartDetails.map((item) => [item._id, item]))
+                    const fetchcartList = new Map(fetchedCartList.map((item) => [item.product_id._id, item]))
 
-                    for ( const item of fetchedCartList){
-                        if (!cartList.has(item.product_id._id)){
-                            dispatch(addBooktoCart({...item.product_id, cartId : item._id , quantityToBuy: item.quantityToBuy}))
+                    for (const item of fetchedCartList) {
+                        if (!cartList.has(item.product_id._id)) {
+                            dispatch(addBooktoCart({ ...item.product_id, cartId: item._id, quantityToBuy: item.quantityToBuy }))
+                            dispatch(updateQuantity({ ...item.product_id, cartId: item._id, quantityToBuy: item.quantityToBuy }))
                         }
                     }
-                    for ( const item of cartDetails){
-                        if (!fetchcartList.has(item._id)){
-                            await addToCartListApi(item._id)
+                    for (const item of cartDetails) {
+                        if (!fetchcartList.has(item._id)) {
+                            await addToCartListApi(item._id);
+
+                            const updatedFetchedCartList = await getallCartDetailsApi();
+                            const matchingBook = updatedFetchedCartList.find(book => item._id === book.product_id._id);
+
+                            if (matchingBook) {
+                                dispatch(updateQuantity({ ...item, cartId: matchingBook._id }));
+                                await updateCartListApi(matchingBook._id, item.quantityToBuy);
+                            }
                         }
+
                     }
-                    for (const [itemId, fetchData] of fetchcartList){
-                        if (cartList.has(itemId)){
-                            let cartItem = cartDetails.find(item=> item._id === itemId)
-                            if (cartItem.quantityToBuy!== fetchData.quantityToBuy){
-                                dispatch(updateQuantity({...cartItem, quantityToBuy:fetchData.quantityToBuy}))
+                    for (const [itemId, fetchData] of fetchcartList) {
+                        if (cartList.has(itemId)) {
+                            let cartItem = cartDetails.find(item => item._id === itemId)
+                            if (cartItem.quantityToBuy !== fetchData.quantityToBuy) {
+                                dispatch(updateQuantity({ ...cartItem, quantityToBuy: fetchData.quantityToBuy }))
                             }
                         }
                     }
@@ -102,7 +119,7 @@ function Signup({ open, handleClose }) {
                 if (wishListDetails.length !== 0 && fetchedWishList.length === 0) {
                     for (const item of wishListDetails) {
                         await addToWishListApi(item._id)
-                        // await updateCartListApi()
+                        await updateCartListApi(item._id, item.quantityToBuy)
                     }
                 }
                 if (wishListDetails.length === 0 && fetchedWishList.length !== 0) {
@@ -110,21 +127,21 @@ function Signup({ open, handleClose }) {
                         dispatch(addItemToWishList(item.product_id))
                     }
                 }
-                if (wishListDetails.length  !== 0 && fetchedWishList.length !== 0) {
-                    const wishList = new Map (wishListDetails.map((item)=>[item._id, item]))
-                    const fetchWishList =new Map( fetchedWishList.map((item)=>[item.product_id._id, item.product_id]))
+                if (wishListDetails.length !== 0 && fetchedWishList.length !== 0) {
+                    const wishList = new Map(wishListDetails.map((item) => [item._id, item]))
+                    const fetchWishList = new Map(fetchedWishList.map((item) => [item.product_id._id, item.product_id]))
 
-                    for ( const item of fetchedWishList){
-                        if (!wishList.has(item.product_id._id)){
+                    for (const item of fetchedWishList) {
+                        if (!wishList.has(item.product_id._id)) {
                             dispatch(addItemToWishList(item.product_id))
                         }
                     }
-                    for ( const item of wishListDetails){
-                        if (!fetchWishList.has(item._id)){
+                    for (const item of wishListDetails) {
+                        if (!fetchWishList.has(item._id)) {
                             await addToWishListApi(item._id)
                         }
                     }
-                
+
                 }
 
                 if (res.status === 200) {
