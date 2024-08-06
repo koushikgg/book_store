@@ -55,3 +55,13 @@ export const placeOrderApi = async (data) => {
         }
     })
 }
+
+export const getFeedbackApi = async (id) => {
+    const res= await axios.get(`https://bookstore.incubation.bridgelabz.com/bookstore_user/get/feedback/${id}`, headerConfig);
+    return res.data.result
+}
+
+export const postFeedbackApi = async (id, data) => {
+    const res= await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add/feedback/${id}`,data, headerConfig);
+    return res
+}

@@ -10,9 +10,10 @@ import { addBooktoCart, decreaseQuantity, increaseQuantity, updateQuantity } fro
 import { addItemToWishList, deleteItemFromWishList } from "../../store/wishListSlice";
 import bookLogo from "../../Assets/book1.png"
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
-import {  addToWishListApi, getallCartDetailsApi, removeWishListApi, updateCartListApi } from "../../Services/bookService";
+import { addToWishListApi, getFeedbackApi, getallCartDetailsApi, postFeedbackApi, removeWishListApi, updateCartListApi } from "../../Services/bookService";
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
+import { toast } from "react-toastify";
 
 
 function BookView() {
@@ -29,6 +30,9 @@ function BookView() {
     const quantity = bookInCart ? bookInCart.quantityToBuy : 0;
     const [bookQuantity, setBookQuantity] = useState(quantity)
     const [addWish, setAddWish] = useState(false)
+    const [feedbackList, setFeedbackList] = useState([])
+    const [comment, setComment] = useState('')
+    const [rating, setRating] = useState(0)
     useEffect(() => {
         setBookQuantity(quantity);
     }, [quantity]);
@@ -41,7 +45,13 @@ function BookView() {
         }
     }, [wishListDetails]);
 
-
+    useEffect(() => {
+        getFeedback()
+    }, [token])
+    async function getFeedback() {
+        const res = await getFeedbackApi(bookid)
+        setFeedbackList(res)
+    }
 
     async function handleClick(action, data) {
         if (action === 'addbook') {
@@ -88,23 +98,37 @@ function BookView() {
         if (action === 'addToWishList') {
             const newAddWish = !addWish;
             setAddWish(newAddWish);
-        
+
             if (token) {
                 if (newAddWish) {
-                    await addToWishListApi(bookDetail._d);
+                    await addToWishListApi(bookid);
                 } else {
-                    await removeWishListApi(bookDetail._id);
+                    await removeWishListApi(bookid);
                 }
             }
-        
-            const bookToAdd = { ...bookDetail, quantityToBuy: 1 }; 
+
+            const bookToAdd = { ...bookDetail, quantityToBuy: 1 };
             if (newAddWish) {
                 dispatch(addItemToWishList(bookToAdd));
             } else {
                 dispatch(deleteItemFromWishList(bookToAdd));
             }
         }
-        
+        if (action === "submitfeedback") {
+            const newFeedback = {
+                "comment": comment,
+                "rating": rating
+            }
+            if (token) {
+                const res = await postFeedbackApi(bookid, newFeedback)
+                toast.success(res?.data?.message)
+                setComment('')
+                setRating(0)
+            } else {
+                toast.error("please Login to submit Review")
+            }
+        }
+
     }
 
     return (
@@ -113,7 +137,7 @@ function BookView() {
                 <div className="bookview-name-sort-opt-main-cnt">
                     <div className="bookview-total-count-main-cnt">
                         <p id="bookview-total-count" onClick={() => navigate(`/dashboard/allbooks`)}>Home/</p>
-                        <p id="bookview-book-text">Book()</p>
+                        <p id="bookview-book-text">Book({bookDetail.quantity})</p>
                     </div>
                 </div>
                 <div className="bookView-inner-main-cnt">
@@ -166,17 +190,37 @@ function BookView() {
                             <div className="bookView-customerfeedback-main-cnt">
                                 <span>Overall rating</span>
                                 <Stack spacing={1} id="bookView-customerrating-star-main-cnt">
-                                    <Rating name="half-rating" defaultValue={0.5} precision={0.5} />
+                                    <Rating name="size-medium" defaultValue={1} onChange={(e) => setRating(e.target.value)} />
                                 </Stack>
-                                <input type="text" placeholder="Write your review" />
+                                <input type="text" placeholder="Write your review" value={comment} onChange={(e) => setComment(e.target.value)} />
                                 <div className="bookView-rating-submit-btn-cnt">
-                                    <Button variant="contained" id="bookView-rating-submit-btn">Submit</Button>
+                                    <Button variant="contained" id="bookView-rating-submit-btn" onClick={() => handleClick('submitfeedback', bookDetail)}>Submit</Button>
                                 </div>
                             </div>
+                            {(feedbackList.length !== 0) ?
+                                (feedbackList?.map((item, key) => (
+                                    < div key={key} className="bookView-customerfeedback-results-main-cnt">
+                                        <div className="bookView-customerfeedback-logo-cnt">
+                                            <p>{item.user_id.fullName[0]}</p>
+                                        </div>
+                                        <div className="bookView-customerfeedback-results-main-cnt">
+                                            <span>{item.user_id.fullName}</span>
+                                            <Stack spacing={1} id="bookView-customerrating-star-main-cnt">
+                                                <Rating name="size-medium" value={item.rating} />
+                                            </Stack>
+                                            <p>{item.comment}</p>
+                                        </div>
+                                    </div >
+                                ))
+                                )
+                                : (
+                                    <>
+                                    </>)
+                            }
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
