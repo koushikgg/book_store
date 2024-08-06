@@ -10,8 +10,7 @@ import { addBooktoCart, decreaseQuantity, increaseQuantity, updateQuantity } fro
 import { addItemToWishList, deleteItemFromWishList } from "../../store/wishListSlice";
 import bookLogo from "../../Assets/book1.png"
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
-import { addToCartListApi, addToWishListApi, getallCartDetailsApi, removeWishListApi, updateCartListApi } from "../../Services/bookService";
+import {  addToWishListApi, getallCartDetailsApi, removeWishListApi, updateCartListApi } from "../../Services/bookService";
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 
@@ -27,7 +26,6 @@ function BookView() {
     const bookExists = wishListDetails.some(book => book._id === bookid);
     const bookDetail = allBookDetails.find(book => book._id === bookid);
     const token = localStorage.getItem('accessToken')
-    console.log(token);
     const quantity = bookInCart ? bookInCart.quantityToBuy : 0;
     const [bookQuantity, setBookQuantity] = useState(quantity)
     const [addWish, setAddWish] = useState(false)
@@ -80,7 +78,6 @@ function BookView() {
                 const fetchedCartList = await getallCartDetailsApi();
                 const updatedData = fetchedCartList.find(book => book.product_id._id === bookToAdd._id)
                 if (updatedData) {
-                    console.log({ ...bookToAdd, cartId: updatedData._id });
                     dispatch(updateQuantity({ ...bookToAdd, cartId: updatedData._id }));
                     await updateCartListApi(updatedData._id, bookToAdd.quantityToBuy)
 

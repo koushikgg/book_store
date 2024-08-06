@@ -43,15 +43,17 @@ const cartSlice = createSlice({
             })
         },
         removeQuantity: (state, action) => {
-            console.log("remove");
-            state.cartDetails = state.cartDetails.filter(book => {
+            state.cartDetails = state.cartDetails.filter((book) => {
                 if (book._id !== action.payload._id) {
                     return book;
                 }
             });
+        },
+        emptyCart: (state, action)=>{
+            state.cartDetails=[]
         }
     }
 });
 
-export const { addBooktoCart, increaseQuantity, decreaseQuantity, removeQuantity, updateQuantity } = cartSlice.actions;
+export const { addBooktoCart, increaseQuantity, decreaseQuantity, removeQuantity, updateQuantity, emptyCart } = cartSlice.actions;
 export default cartSlice.reducer;

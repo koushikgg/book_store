@@ -480,9 +480,123 @@
         opacity: 1;
     }
 }
-.cart-order-details-btn-cnt{
+
+.cart-order-details-btn-cnt {
     margin-bottom: 23px;
     width: 97%;
     display: flex;
     justify-content: flex-end;
+}
+
+.cart-order-img-main-cnt {
+    width: 100%;
+
+    img {
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+.order-main-cnt {
+    margin-bottom: 70px;
+}
+
+.order-cnt-main-txt {
+    width: 100%;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    border: 1px solid #DCDCDC;
+    opacity: 1;
+
+    p {
+        text-align: center;
+        font: normal normal medium 12px/15px Lato;
+        letter-spacing: 0px;
+        color: #333232;
+        opacity: 1;
+    }
+
+    #order-cnt-email-txt {
+        margin-right: 33px;
+    }
+
+    #order-cnt-contact-txt{
+        margin-right: 60px;
+    }
+    #order-cnt-address-txt{
+        margin-right: 97px;
+    }
+}
+
+.order-cnt-main-txt-info-cnt {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .order-cnt-main-txt-email-cnt {
+        width: 29.6%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        border: 1px solid #DCDCDC;
+        opacity: 1;
+
+        p {
+            text-align: center;
+            font: normal normal medium 12px/15px Lato;
+            letter-spacing: 0px;
+            color: #333232;
+            opacity: 1;
+        }
+    }
+
+    .order-cnt-main-txt-num-cnt {
+        width: 29.8%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        border: 1px solid #DCDCDC;
+        opacity: 1;
+
+        p {
+            text-align: center;
+            font: normal normal medium 12px/15px Lato;
+            letter-spacing: 0px;
+            color: #333232;
+            opacity: 1;
+        }
+    }
+}
+
+.order-cnt-main-txt-address-cnt {
+    width: 40.6%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #DCDCDC;
+    opacity: 1;
+
+    p {
+        text-align: center;
+        font: normal normal medium 12px/15px Lato;
+        letter-spacing: 0px;
+        color: #333232;
+        opacity: 1;
+    }
+
+}
+.order-cnt-main-continue-btn-cnt{
+    margin-top: 39px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }

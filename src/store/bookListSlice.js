@@ -8,7 +8,6 @@ const bookListSlice = createSlice({
   },
   reducers: {
     getAllBooks: (state, action) => {
-
       state.allBooks = action.payload;
     }
   }

@@ -13,9 +13,9 @@ import Stack from '@mui/material/Stack';
 
 
 function AllBooks() {
-    const [booklist, setBooklist] = useState([]);
-    const [sortSelect, setSortSelect] = useState('');
+    // const [booklist, setBooklist] = useState([]);
     const bookList = useSelector((store) => store.allbooksStore.allBooks)
+    const bookListSearch = useSelector((store) => store.bookSearchDetails.searchBookValue)
     const [bookCount, setBookCount] = useState(bookList.length)
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
@@ -27,6 +27,10 @@ function AllBooks() {
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
     };
+
+    useEffect(()=>{
+
+    },[bookListSearch])
 
     const startIndex = (currentPage -1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;

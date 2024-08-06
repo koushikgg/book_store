@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import Button from '@mui/material/Button';
 import { deleteItemFromWishList } from "../../store/wishListSlice";
 import { useEffect, useState } from "react";
 import bookLogo from "../../Assets/book1.png"
@@ -14,7 +13,7 @@ function Wishlist() {
     const [wishlistCount, setWishlistCount] = useState(wishList.length)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const token = localStorage.getItem('accessToken')    
+    const token = localStorage.getItem('accessToken') 
 
     useEffect(() => {
         setWishList(wishListDetails)

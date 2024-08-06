@@ -11,6 +11,8 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import { useNavigate } from 'react-router-dom';
 import Signup from '../Signup/Signup';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import { useDispatch } from 'react-redux';
+import { addSearchBookValue } from '../../store/bookSearchSlice';
 
 
 function Header() {
@@ -19,17 +21,7 @@ function Header() {
     const open = Boolean(anchorEl);
     const [signupModalOpen, setSignupModalOpen] = React.useState(false);
     const token = localStorage.getItem('accessToken')
-    // const [openModal, setOpenModal] = React.useState(false);
-    // useEffect(()=>{
-    //     fectchBooks()
-    // },[])
-
-
-
-
-    // const handleOpenModal = () => setOpenModal(true);
-    // const handleCloseModal = () => setOpenModal(false);
-
+    const dispatch = useDispatch()
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -58,7 +50,7 @@ function Header() {
                     </div>
                     <div className='header-search-main-cnt'>
                         <SearchIcon id='header-seacrh-logo' />
-                        <input type="text" placeholder='Search...' />
+                        <input type="text" placeholder='Search...' onChange={(e)=>dispatch(addSearchBookValue(e.target.value))}/>
                     </div>
                 </div>
                 <div className="header-opt-main-cnt">
