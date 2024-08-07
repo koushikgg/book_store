@@ -20,7 +20,7 @@ import orderPlaced from "../../Assets/orderPlaced.png"
 
 
 function Cart() {
-    const token = localStorage.getItem('accessToken') || true
+    const token = localStorage.getItem('accessToken') 
     const cartDetailsList = useSelector(store => store.allcartDetails.cartDetails);
     const [cartDetails, setCartDetails] = useState(cartDetailsList);
     const [cartCount, setCartCount] = useState(cartDetailsList.length);

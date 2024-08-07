@@ -20,11 +20,19 @@ export const getallCartDetailsApi = async () => {
 }
 
 export const addToCartListApi = async (id) => {
-    return await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add_cart_item/${id}`, {}, headerConfig);
+    return await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add_cart_item/${id}`, {}, {
+        headers: {
+            'x-access-token': localStorage.getItem('accessToken')
+        }
+    });
 }
 
 export const updateCartListApi = async (id, quantity) => {
-    const res = await axios.put(`https://bookstore.incubation.bridgelabz.com/bookstore_user/cart_item_quantity/${id}`, { quantityToBuy  : quantity }, headerConfig);
+    const res = await axios.put(`https://bookstore.incubation.bridgelabz.com/bookstore_user/cart_item_quantity/${id}`, { quantityToBuy  : quantity }, {
+        headers: {
+            'x-access-token': localStorage.getItem('accessToken')
+        }
+    });
     return res
 }
 export const removeCartListApi = async (id) => {
@@ -41,11 +49,19 @@ export const getWishlistItemsApi = async () => {
 }
 
 export const addToWishListApi = async (id) => {
-    return await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add_wish_list/${id}`, '', headerConfig);
+    return await axios.post(`https://bookstore.incubation.bridgelabz.com/bookstore_user/add_wish_list/${id}`, '', {
+        headers: {
+            'x-access-token': localStorage.getItem('accessToken')
+        }
+    });
 }
 
 export const removeWishListApi = async (id) => {
-    return await axios.delete(`https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_wishlist_item/${id}`, headerConfig);
+    return await axios.delete(`https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_wishlist_item/${id}`, {
+        headers: {
+            'x-access-token': localStorage.getItem('accessToken')
+        }
+    });
 }
 
 export const placeOrderApi = async (data) => {
@@ -57,7 +73,11 @@ export const placeOrderApi = async (data) => {
 }
 
 export const getFeedbackApi = async (id) => {
-    const res= await axios.get(`https://bookstore.incubation.bridgelabz.com/bookstore_user/get/feedback/${id}`, headerConfig);
+    const res= await axios.get(`https://bookstore.incubation.bridgelabz.com/bookstore_user/get/feedback/${id}`, {
+        headers: {
+            'x-access-token': localStorage.getItem('accessToken')
+        }
+    });
     return res.data.result
 }
 
