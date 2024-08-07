@@ -10,27 +10,52 @@ import { Store } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { getValue } from "@testing-library/user-event/dist/utils";
 
 
 function AllBooks() {
-    // const [booklist, setBooklist] = useState([]);
-    const bookList = useSelector((store) => store.allbooksStore.allBooks)
+    const [bookList, setBookList] = useState([]);
+    const bookListDetails = useSelector((store) => store.allbooksStore.allBooks)
     const bookListSearch = useSelector((store) => store.bookSearchDetails.searchBookValue)
     const [bookCount, setBookCount] = useState(bookList.length)
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
     useEffect(() => {
-        setBookCount(bookList.length)
-    }, [bookList])
+        setBookCount(bookListDetails.length)
+        setBookList(bookListDetails)
+    }, [bookListDetails])
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
     };
 
     useEffect(()=>{
-
+        const filteredbooks = bookListDetails.filter((book)=>{
+            if (book.bookName.toLowerCase().includes(bookListSearch.toLowerCase())){
+                return book
+            }
+            if (book.author.includes(bookListSearch)){
+                return book
+            }
+        })
+        setBookList(filteredbooks)
     },[bookListSearch])
+
+    function sortTheBooks(action) {
+        const sortBooks = [...bookList];
+    
+        if (action === "Low to High") {
+            sortBooks.sort((a, b) => a.discountPrice - b.discountPrice);
+            setBookList(sortBooks);
+        } else if (action === "High to Low") {
+            sortBooks.sort((a, b) => b.discountPrice - a.discountPrice);
+            setBookList(sortBooks);
+        }else{
+            setBookList(bookListDetails);
+        }
+
+    }
 
     const startIndex = (currentPage -1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -49,12 +74,13 @@ function AllBooks() {
                         labelId="demo-select-small-label"
                         id="demo-select-small"
                         label="Sort by relevance  "
+                        onChange={(e)=>sortTheBooks(e.target.value)}
                     >
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value={10}>Price: Low to High</MenuItem>
-                        <MenuItem value={20}>Price: High to Low</MenuItem>
+                        <MenuItem value={"Low to High"}>Price: Low to High</MenuItem>
+                        <MenuItem value={"High to Low"}>Price: High to Low</MenuItem>
                     </Select>
                 </FormControl>
             </div>

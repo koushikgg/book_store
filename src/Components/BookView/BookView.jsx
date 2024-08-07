@@ -49,8 +49,10 @@ function BookView() {
         getFeedback()
     }, [token])
     async function getFeedback() {
-        const res = await getFeedbackApi(bookid)
-        setFeedbackList(res)
+        if (token){
+            const res = await getFeedbackApi(bookid)
+            setFeedbackList(res)
+        }
     }
 
     async function handleClick(action, data) {
@@ -173,7 +175,9 @@ function BookView() {
                         <div className="bookView-details-title-main-cnt">
                             <a href="#" id="bookView-details-title">{bookDetail.bookName}</a>
                             <span className="bookView-details-author">{bookDetail.author}</span>
-                            <span className="bookView__ratingStars">4.5 <StarOutlinedIcon id="bookView-details-star" /></span>
+                            <div style={{display:"flex",gap:"7px"}}>
+                                <span className="bookView__ratingStars">4.5<StarOutlinedIcon id="bookView-details-star" /></span><span>({feedbackList.length}) </span>
+                            </div>
                             <div className="bookView-details-title-price-cnt">
                                 <span className="bookView-details-discountedPrice">Rs.{bookDetail.discountPrice}</span>
                                 <span className="bookView-details-originalPrice">Rs.{bookDetail.price}</span>
